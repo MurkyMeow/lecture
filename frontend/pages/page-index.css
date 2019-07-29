@@ -1,0 +1,15 @@
+.header {
+  color: #fff;
+  padding: 5px 10px;
+  background: #8056a0;
+}
+.header-title {
+  font-size: 1.35em;
+}
+
+.content section {
+  margin: 50px auto;
+  max-width: 1000px;
+  min-height: 400px;
+  background: #b3dbf2;
+}
