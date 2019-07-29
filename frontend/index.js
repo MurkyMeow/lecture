@@ -1,4 +1,5 @@
 import { el } from 'marycat'
+import * as router from './router'
 
 window.div = el('div')
 window.img = el('img')
@@ -9,3 +10,5 @@ window.section = el('section')
 
 import './pages/page-index'
 import './pages/page-about'
+
+router.update(location.pathname)
