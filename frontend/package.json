@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "marycat": "^1.0.3"
+    "marycat": "^1.0.4"
   },
   "devDependencies": {
     "precss": "^4.0.0",

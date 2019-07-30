@@ -1,4 +1,4 @@
-import { el } from 'marycat'
+import { el, fragment } from 'marycat'
 import * as router from './router'
 
 window.div = el('div')
@@ -8,7 +8,13 @@ window.main = el('main')
 window.header = el('header')
 window.section = el('section')
 
-import './pages/page-index'
-import './pages/page-about'
+router.update()
 
-router.update(location.pathname)
+const app = fragment()
+  (header('.header')
+    (div('.header-title')('🌌 lecture'))
+  )
+  (main()
+    (router.element)
+  )
+app(document.body)

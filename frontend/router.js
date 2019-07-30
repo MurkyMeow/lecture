@@ -1,16 +1,20 @@
+import { State } from 'marycat'
+import { pageIndex } from './pages/page-index'
+import { pageAbout } from './pages/page-about'
+
 const routes = [
   {
     regex: /^$/,
-    component: 'lecture-page-index',
-  },
-  {
+    component: pageIndex,
+  }, {
     regex: /^about$/,
-    component: 'lecture-page-about',
+    component: pageAbout,
   }
 ]
 
 let query = {}
 
+export const element = new State()
 export function get_query() {
   return query
 }
@@ -22,16 +26,10 @@ export function update() {
     return
   }
   const [_, ...args] = path.match(route.regex) || []
-  const $el = document.createElement(route.component)
-  const { firstChild } = document.body
-  if (firstChild) {
-    firstChild.replaceWith($el)
-  } else {
-    document.body.appendChild($el)
-  }
   if (route.params) {
     query = {}
     route.params.forEach((param, i) => query[param] = args[i])
   }
+  element.v = route.component
 }
 window.onhashchange = update

@@ -6,11 +6,6 @@ export const pageIndex = webc({
   props: {},
   css,
   fun: h => (h
-    (header('.header')
-      (div('.header-title')
-        (span('🌌 lecture'))
-      )
-    )
     (div('.content')
       (section())
       (section())
