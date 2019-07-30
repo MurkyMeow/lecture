@@ -1,11 +1,11 @@
 const routes = [
   {
     regex: /^$/,
-    component: 'melior-page-index',
+    component: 'lecture-page-index',
   },
   {
     regex: /^about$/,
-    component: 'melior-page-about',
+    component: 'lecture-page-about',
   }
 ]
 
