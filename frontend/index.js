@@ -1,4 +1,5 @@
-import { el, fragment } from 'marycat'
+import { State, el, _if, fragment } from 'marycat'
+import { Button } from './components/button'
 import * as router from './router'
 
 import './index.css';
@@ -12,9 +13,20 @@ window.section = el('section')
 
 router.update()
 
+const user = new State(null)
+
 const app = fragment()
   (header('.header')
-    (div('.header-title')('🌌 lecture'))
+    (div('.header-logo')('🌌 Lecture'))
+    (div('.header-auth')
+      (_if(user)
+        (Button().text('username'))
+        (Button().text('Выйти'))
+      .else()
+        (Button().text('Создать аккаунт'))
+        (Button().text('Войти'))
+      )
+    )
   )
   (main()
     (router.element)
