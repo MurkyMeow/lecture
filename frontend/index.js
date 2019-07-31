@@ -1,5 +1,6 @@
-import { State, el, _if, fragment } from 'marycat'
+import { State, el, _if, form, input, fragment } from 'marycat'
 import { Button } from './components/button'
+import { FormAuth } from './components/form-auth'
 import * as router from './router'
 
 import './index.css';
@@ -10,10 +11,13 @@ window.span = el('span')
 window.main = el('main')
 window.header = el('header')
 window.section = el('section')
+window.form = form
+window.input = input
 
 router.update()
 
 const user = new State(null)
+const signup = new State(true)
 
 const app = fragment()
   (header('.header')
@@ -23,10 +27,11 @@ const app = fragment()
         (Button().text('username'))
         (Button().text('Выйти'))
       .else()
-        (Button().text('Создать аккаунт'))
-        (Button().text('Войти'))
+        (Button().text('Создать аккаунт').on('click', () => signup.v = true))
+        (Button().text('Войти').on('click', () => signup.v = false))
       )
     )
+    (FormAuth().signup(signup).attr('tabindex', 0))
   )
   (main()
     (router.element)
