@@ -1,6 +1,8 @@
 import { el, fragment } from 'marycat'
 import * as router from './router'
 
+import './index.css';
+
 window.div = el('div')
 window.img = el('img')
 window.span = el('span')
