@@ -2,9 +2,15 @@ import resolve from 'rollup-plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
 import serve from 'rollup-plugin-serve'
 import { terser } from 'rollup-plugin-terser'
-import precss from 'precss';
+import Precss from 'precss';
 
 const dev = process.env.ROLLUP_WATCH;
+
+const precss = Precss({
+  features: {
+    'focus-within-pseudo-class': false,
+  },
+})
 
 export default {
   input: 'index.js',
