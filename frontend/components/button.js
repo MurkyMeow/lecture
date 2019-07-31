@@ -8,6 +8,6 @@ export const Button = webc({
     text: '',
   },
   fun: (h, { text }) => (h
-    (span(text).attr('tabindex', 0))
+    (span(text).tabindex(0))
   ),
 })
