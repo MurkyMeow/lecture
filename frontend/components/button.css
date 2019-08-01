@@ -1,0 +1,13 @@
+:host {
+  font-weight: bold;
+  color: #fff;
+}
+span {
+  display: block;
+  cursor: pointer;
+  text-align: center;
+  padding: .25em .625em;
+  border-radius: 5px;
+  background: linear-gradient(to right, #20a5cb, #1d87cc);
+  transition: background-color .1s;
+}

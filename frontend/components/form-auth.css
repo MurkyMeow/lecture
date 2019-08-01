@@ -1,0 +1,18 @@
+form {
+  display: flex;
+  flex-direction: column;
+  padding: 5px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 1px 5px rgb(0, 0, 0, .5);
+  & input {
+    padding: 2px 5px;
+    border-style: solid;
+    border-radius: 5px;
+    margin-bottom: 5px;
+  }
+  & lecture-button {
+    font-size: 12px;
+    margin: 0 auto;
+  }
+}
