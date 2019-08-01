@@ -1,9 +1,9 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from django.http import HttpResponse, JsonResponse
 from .serializers import *
 
 # Create your views here.
@@ -11,11 +11,10 @@ from .serializers import *
 
 @api_view(['POST'])
 def SignupView(request):
-    new_user = User.objects.create(
-        name = request.POST.get("name"),
-        email = request.POST.get("email"),
-        password = request.POST.get("password")
-    )
+    name = request.POST.get("name")
+    email = request.POST.get("email")
+    password = request.POST.get("password")
+    new_user = User.objects.create(name=name, email=email, password=password)
     if User.objects.filter(email=email).exists():  
         return Response(status=HTTP_409_CONFLICT)
     try:
@@ -40,3 +39,11 @@ def SigninView(request):
         return response
     else:
         return Response(status=HTTP_401_UNAUTHORIZED)
+
+
+@api_view(['POST'])
+def LogoutView(request):
+    email = request.POST.get("email")
+    logout_user = User.objects.get(email=email)
+    logout_user.is_authenticated = False
+    return Response( {'ok': True } )
