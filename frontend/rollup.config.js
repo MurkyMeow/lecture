@@ -1,6 +1,5 @@
 import resolve from 'rollup-plugin-node-resolve'
 import postcss from 'rollup-plugin-postcss'
-import serve from 'rollup-plugin-serve'
 import { terser } from 'rollup-plugin-terser'
 import Precss from 'precss';
 
@@ -25,6 +24,5 @@ export default {
       plugins: [precss],
     }),
     !dev && terser(),
-    dev && serve(),
   ],
 }
