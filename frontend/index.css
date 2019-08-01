@@ -5,17 +5,39 @@ body {
 }
 
 .header {
-  color: #fff;
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
   padding: 5px 10px;
-  background: #8056a0;
+  background: #fff;
+  box-shadow: 0 1px 5px rgb(0, 0, 0, .5);
+  &:not(:focus-within) lecture-form-auth {
+    display: none;
+  }
 }
-.header-title {
-  font-size: 1.35em;
+.header-logo {
+  font-size: 1.65em;
+  font-style: italic;
 }
-
-.content section {
-  margin: 50px auto;
-  max-width: 1000px;
-  min-height: 400px;
-  background: #b3dbf2;
+.header-auth {
+  font-size: .9em;
+  position: relative;
+  display: flex;
+  margin-left: auto;
+  & lecture-button:not(:last-child) {
+    margin-right: 10px;
+  }
+}
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+}
+lecture-form-auth {
+  position: absolute;
+  top: 55px;
+  right: 22px;
+  animation: appear .2s;
 }

@@ -1,9 +1,15 @@
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
+<<<<<<< HEAD
 from django.http import HttpResponse, JsonResponse
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+=======
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
+from django.http import HttpResponse, JsonResponse
+>>>>>>> 0384c200bf2e9493d564c9f8514f68c11896ca54
 from .serializers import *
 
 # Create your views here.
@@ -11,10 +17,18 @@ from .serializers import *
 
 @api_view(['POST'])
 def SignupView(request):
+<<<<<<< HEAD
     name = request.POST.get("name")
     email = request.POST.get("email")
     password = request.POST.get("password")
     new_user = User.objects.create(name=name, email=email, password=password)
+=======
+    new_user = User.objects.create(
+        name = request.POST.get("name"),
+        email = request.POST.get("email"),
+        password = request.POST.get("password")
+    )
+>>>>>>> 0384c200bf2e9493d564c9f8514f68c11896ca54
     if User.objects.filter(email=email).exists():  
         return Response(status=HTTP_409_CONFLICT)
     try:
@@ -39,6 +53,7 @@ def SigninView(request):
         return response
     else:
         return Response(status=HTTP_401_UNAUTHORIZED)
+<<<<<<< HEAD
 
 
 @api_view(['POST'])
@@ -47,3 +62,5 @@ def LogoutView(request):
     logout_user = User.objects.get(email=email)
     logout_user.is_authenticated = False
     return Response( {'ok': True } )
+=======
+>>>>>>> 0384c200bf2e9493d564c9f8514f68c11896ca54
