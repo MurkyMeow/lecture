@@ -1,3 +1,4 @@
+from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
@@ -9,32 +10,30 @@ from .serializers import *
 # Create your views here.
 
 def credentials(user):
-    response = Response(status=HTTP_200_OK)
+    response = Response(status=status.HTTP_200_OK)
     response.set_cookie('user_id', user.id)
     return response
 
 @api_view(['POST'])
 def SignupView(request):
-    email = request.POST.get('email')
-    if User.objects.filter(email=email).exists():
-        return Response(status=HTTP_409_CONFLICT)
+    name = request.data.get('name')
+    email = request.data.get('email')
+    password = request.data.get('password')
+    if User.objects.filter(Q(email=email) | Q(username=name)).exists():
+        return Response(status=status.HTTP_409_CONFLICT)
     try:
-        new_user = User.objects.create(
-            email = email,
-            first_name = request.POST.get('name'),
-            password = request.POST.get('password')
-        )
-        validate_password(new_user.password)
-        new_user.save()
-        return credentials(new_user)
+        validate_password(password)
     except ValidationError:
-        return Response(status=HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    new_user = User.objects.create(email=email, password=password, username=name)
+    return credentials(new_user)
 
 @api_view(['POST'])
 def SigninView(request):
-    email = request.POST.get('email')
-    password = request.POST.get('password')
-    user = User.objects.get(email=email)
-    if user.password == password:
+    user = authenticate(
+        username=request.data.get('name'),
+        password=request.data.get('password'),
+    )
+    if user:
         return credentials(user)
-    return Response(status=HTTP_403_FORBIDDEN)
+    return Response(status=status.HTTP_403_FORBIDDEN)
