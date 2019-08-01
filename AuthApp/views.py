@@ -8,6 +8,11 @@ from .serializers import *
 
 # Create your views here.
 
+def credentials(user):
+    response = Response(status=HTTP_200_OK)
+    response.set_cookie('user_id', user.id)
+    return response
+
 @api_view(['POST'])
 def SignupView(request):
     email = request.POST.get('email')
@@ -16,14 +21,12 @@ def SignupView(request):
     try:
         new_user = User.objects.create(
             email = email,
-            name = request.POST.get('name'),
+            first_name = request.POST.get('name'),
             password = request.POST.get('password')
         )
         validate_password(new_user.password)
         new_user.save()
-        response = Response(status=HTTP_200_OK)
-        response.set_cookie('user_id', new_user.id)
-        return response
+        return credentials(new_user)
     except ValidationError:
         return Response(status=HTTP_400_BAD_REQUEST)
 
@@ -33,9 +36,5 @@ def SigninView(request):
     password = request.POST.get('password')
     user = User.objects.get(email=email)
     if user.password == password:
-        user.is_authenticated = True
-        response = Response(status=HTTP_200_OK)
-        response.set_cookie('user_id', user.id)
-        return response
-    else:
-        return Response(status=HTTP_403_FORBIDDEN)
+        return credentials(user)
+    return Response(status=HTTP_403_FORBIDDEN)
