@@ -32,3 +32,8 @@ def SigninView(request):
     if user.password == request.data.get('password'):
         return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
+
+@api_view(['POST'])
+def LogoutView(request):
+    logout(request)
+    return Response(status=status.HTTP_200_OK)
