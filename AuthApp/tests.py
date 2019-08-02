@@ -15,7 +15,7 @@ class AccountTests(APITestCase):
         Ensure we can create a new account object.
         """
         url = '/auth/signup/'
-        data = {'name': 'Elvis', 'email': 'fuckyouhoney@gmail.com',
+        data = {'name': 'RulonOboev', 'email': 'fuckyouhoney@gmail.com',
                 'password': 'getoverhere'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -25,6 +25,6 @@ class AccountTests(APITestCase):
         Ensure we can login to new account object.
         """
         url = '/auth/signin/'
-        data = {'name': 'DabApps', 'password': 'blablabla123'}
+        data = {'email': 'hello@gmail.com', 'password': 'blablabla123'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)

@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
@@ -14,7 +14,7 @@ def credentials(req, user):
 
 @api_view(['POST'])
 def SignupView(request):
-    name = request.data.get('name')
+    username = request.data.get('name')
     email = request.data.get('email')
     password = request.data.get('password')
     if User.objects.filter(Q(email=email) | Q(username=name)).exists():
@@ -23,12 +23,12 @@ def SignupView(request):
         validate_password(password)
     except ValidationError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.create(email=email, password=password, username=name)
+    user = User.objects.create(email=email, password=password, username=username)
     return credentials(request, user)
 
 @api_view(['POST'])
 def SigninView(request):
-    user = User.objects.get(username=request.data.get('name'))
+    user = User.objects.get(email=request.data.get('email'))
     if user.password == request.data.get('password'):
         return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
