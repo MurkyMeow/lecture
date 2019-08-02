@@ -1,18 +1,17 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, login
 from django.contrib.auth.models import User
+from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
-from django.http import HttpResponse, JsonResponse
+from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import *
 
 # Create your views here.
 
-def credentials(user):
-    response = Response(status=status.HTTP_200_OK)
-    response.set_cookie('user_id', user.id)
-    return response
+def credentials(req, user):
+    login(req, user)
+    return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def SignupView(request):
@@ -25,8 +24,8 @@ def SignupView(request):
         validate_password(password)
     except ValidationError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    new_user = User.objects.create(email=email, password=password, username=name)
-    return credentials(new_user)
+    user = User.objects.create(email=email, password=password, username=name)
+    return credentials(request, user)
 
 @api_view(['POST'])
 def SigninView(request):
@@ -35,5 +34,5 @@ def SigninView(request):
         password=request.data.get('password'),
     )
     if user:
-        return credentials(user)
+        return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
