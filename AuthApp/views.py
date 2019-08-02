@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
 # Create your views here.
 
 def credentials(req, user):
@@ -29,10 +28,7 @@ def SignupView(request):
 
 @api_view(['POST'])
 def SigninView(request):
-    user = authenticate(
-        username=request.data.get('name'),
-        password=request.data.get('password'),
-    )
-    if user:
+    user = User.objects.get(username=request.data.get('name'))
+    if user.password == request.data.get('password'):
         return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
