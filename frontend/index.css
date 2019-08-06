@@ -41,3 +41,17 @@ lecture-form-auth {
   right: 22px;
   animation: appear .2s;
 }
+
+
+.notification-box {
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
+}
+.notification {
+  width: 150px;
+  border-radius: 5px;
+  background: gray;
+  &.success { background: green }
+  &.error { background: indianred }
+}
