@@ -6,7 +6,6 @@ from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-# Create your views here.
 
 def credentials(req, user):
     login(req, user)
@@ -17,6 +16,8 @@ def SignupView(request):
     name = request.data.get('name')
     email = request.data.get('email')
     password = request.data.get('password')
+    if not name or not email or not password:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
     if User.objects.filter(Q(email=email) | Q(username=name)).exists():
         return Response(status=status.HTTP_409_CONFLICT)
     try:
@@ -28,8 +29,12 @@ def SignupView(request):
 
 @api_view(['POST'])
 def SigninView(request):
-    user = User.objects.get(email=request.data.get('email'))
-    if user.password == request.data.get('password'):
+    email = request.data.get('email')
+    password = request.data.get('password')
+    if not email or not password:
+        return Response(status=status.HTTP_400_BAD_REQUEST)
+    user = User.objects.get(email=email)
+    if user.password == password:
         return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
 
