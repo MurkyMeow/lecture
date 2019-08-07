@@ -4,7 +4,7 @@ form {
   padding: 5px;
   border-radius: 5px;
   background: #fff;
-  box-shadow: 0 1px 5px rgb(0, 0, 0, .5);
+  border: 1px solid #d3d3d3;
   & input {
     padding: 2px 5px;
     border-style: solid;
