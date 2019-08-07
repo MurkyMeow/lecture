@@ -7,7 +7,7 @@ export const Button = webc({
   props: {
     text: '',
   },
-  fun: (h, { text }) => (h
+  render: (h, { text }) => (h
     (span(text).tabindex(0))
   ),
 })

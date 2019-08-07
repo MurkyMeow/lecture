@@ -10,7 +10,7 @@ export const FormAuth = webc({
   props: {
     signup: true,
   },
-  fun(h, { signup }) {
+  render(h) {
     const data = new State()
     const submit = async () => {
       const url = `/auth/${signup.v ? 'signup' : 'signin'}/`

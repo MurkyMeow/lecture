@@ -25,11 +25,11 @@ export function update() {
     console.warn(`Unknown path: ${path}`)
     return
   }
-  const [_, ...args] = path.match(route.regex) || []
   if (route.params) {
     query = {}
+    const [_, ...args] = path.match(route.regex) || []
     route.params.forEach((param, i) => query[param] = args[i])
   }
-  element.v = route.component
+  element.v = route.component()
 }
 window.onhashchange = update
