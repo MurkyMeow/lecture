@@ -13,10 +13,19 @@ form {
   }
   & lecture-button {
     font-size: 12px;
-    margin: 0 auto;
+    margin: 5px auto 0;
   }
 }
 lecture-toggle {
   font-size: 0.8em;
   margin: 0 12px 10px;
+}
+button {
+  display: contents;
+}
+.error {
+  font-size: 0.95em;
+  color: red;
+  text-align: center;
+  margin-bottom: 5px;
 }

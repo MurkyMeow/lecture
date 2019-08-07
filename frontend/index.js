@@ -9,6 +9,7 @@ window.div = el('div')
 window.img = el('img')
 window.span = el('span')
 window.main = el('main')
+window.button = el('button')
 window.header = el('header')
 window.section = el('section')
 window.form = form
