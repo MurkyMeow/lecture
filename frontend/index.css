@@ -39,8 +39,8 @@ body {
 }
 lecture-form-auth {
   position: absolute;
-  top: 55px;
-  right: 22px;
+  top: 50px;
+  right: 5px;
   animation: appear .2s;
 }
 

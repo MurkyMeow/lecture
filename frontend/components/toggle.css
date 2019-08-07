@@ -1,0 +1,14 @@
+:host {
+  cursor: pointer;
+  text-align: center;
+  display: inline-flex;
+  border-radius: 1em;
+  background: #d3d3d3;
+}
+span {
+  user-select: none;
+  flex: 1;
+  padding: 2px 8px;
+  border-radius: 1em;
+  &.active { background: #20a4cb }
+}

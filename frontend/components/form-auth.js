@@ -1,5 +1,6 @@
 import { webc, _if, State } from 'marycat'
 import { Button } from './button'
+import { Toggle } from './toggle'
 import notification from '../notification'
 import css from './form-auth.css'
 import * as api from '../api'
@@ -12,6 +13,7 @@ export const FormAuth = webc({
   },
   render(h) {
     const data = new State()
+    const option = new State()
     const submit = async () => {
       const url = `/auth/${signup.v ? 'signup' : 'signin'}/`
       try {
@@ -21,7 +23,8 @@ export const FormAuth = webc({
       }
     }
     return h
-    (form().submit(submit).bind(data)
+    (form().submit(submit)
+      (Toggle().between(['🔑', '👽']).bind(option))
       (input('@email').type('email')
         .placeholder('Email')
         .required()
@@ -30,9 +33,13 @@ export const FormAuth = webc({
         .placeholder('Пароль')
         .required()
       )
-      (_if(signup)
+      (_if(option.eq('👽'))
         (input('@password_again').type('password')
           .placeholder('Повторите пароль')
+          .required()
+        )
+        (input('@name')
+          .placeholder('Никнейм')
           .required()
         )
       )
