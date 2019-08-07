@@ -18,8 +18,14 @@ def SignupView(request):
     password = request.data.get('password')
     if not name or not email or not password:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    if User.objects.filter(Q(email=email) | Q(username=name)).exists():
-        return Response(status=status.HTTP_409_CONFLICT)
+    conflict = {
+        'email': User.objects.filter(email=email).exists(),
+        'name': User.objects.filter(username=name).exists(),
+    }
+    if conflict['email'] or conflict['name']:
+        return Response(data={ 'conflict': conflict },
+            status=status.HTTP_409_CONFLICT
+        )
     try:
         validate_password(password)
     except ValidationError:

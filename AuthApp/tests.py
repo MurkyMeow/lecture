@@ -2,10 +2,16 @@ from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
 
+user = {
+    'name': 'Test',
+    'email': 'test@test.com',
+    'password': 'testtest123'
+}
+
 class AccountTests(APITestCase):
     def setUp(self):
         User.objects.create(
-            username='Apps', email='h@gmail.com', password='blabla123'
+            username=user['name'], email=user['email'], password=user['password']
         )
 
     def test_create_account(self):
@@ -18,7 +24,21 @@ class AccountTests(APITestCase):
 
     def test_login(self):
         res = self.client.post('/auth/signin/', {
-            'email': 'h@gmail.com',
-            'password': 'blabla123',
+            'email': user['email'],
+            'password': user['password'],
         })
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+    def test_signup_name_conflict(self):
+        name = self.client.post('/auth/signup/', {
+            'name': user['name'], 'email': 'z', 'password': 'z',
+        })
+        self.assertEqual(name.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(name.data['conflict']['name'], True)
+
+    def test_signup_email_conflict(self):
+        email = self.client.post('/auth/signup/', {
+            'email': user['email'], 'name': 'z', 'password': 'z',
+        })
+        self.assertEqual(email.status_code, status.HTTP_409_CONFLICT)
+        self.assertEqual(email.data['conflict']['email'], True)
