@@ -1,10 +1,10 @@
-const box = document.body.querySelector('notification-box')
-
-function show(text, type, timeout = 1000) {
+function show(text, type, timeout = 2000) {
   const el =
-    div('.notification').class(type)
+    div('.notification').attr('data-type', type)
       (text)
-  const $el = el(box)
+  const $el = el.connect(
+    document.querySelector('.notification-box')
+  )
   setTimeout(() => $el.remove(), timeout)
 }
 
