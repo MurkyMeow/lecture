@@ -7,13 +7,19 @@ export const Progress = webc({
   props: {
     max: 4,
     done: [],
+    active: -1,
   },
-  render(h, { max, done }) {
+  render(h, { max, done, active }) {
     const items = max.after(v => [...Array(v).keys()])
     return h
     (iter(items, (_, i) => {
-      const active = done.after(v => v.includes(i.v))
-      return (span().class(active.tern('active', '')))
+      const isdone = done.after(v => v.includes(i.v))
+      const isactive = active.eq(i)
+      return (span()
+        .click(() => active.v = i.v)
+        .attr('data-done', isdone)
+        .attr('data-active', isactive)
+      )
     }))
   },
 })

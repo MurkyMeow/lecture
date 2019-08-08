@@ -17,10 +17,19 @@ const comments = new State([
 export const Lesson = webc({
   name: 'lecture-lesson',
   css,
-  render: h => (h
-    (div('.wrapper')
+  props: {
+    slide: 0,
+  },
+  render: (h, { slide }) => (h
+    (div('.wrapper').tabindex(0)
+      .keydown(e => {
+        switch (e.code) {
+          case 'ArrowLeft': return slide.v > 0 && slide.v--
+          case 'ArrowRight': return slide.v < 5 - 1 && slide.v++
+        }
+      })
       (div('.content')
-        (Progress().max(5))
+        (Progress().max(5).active(slide))
         (div('.lesson-name')('В жизни не пригодится?'))
         (div('.course-name')('Линейная алгебра'))
         (div('.lesson-text')('Lorem ipsum, dolor sit amet consectetur adipisicing elit.'))
