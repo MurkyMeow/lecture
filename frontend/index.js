@@ -5,6 +5,7 @@ import * as router from './router'
 
 import './index.css';
 
+window.h1 = el('h1')
 window.div = el('div')
 window.img = el('img')
 window.span = el('span')
