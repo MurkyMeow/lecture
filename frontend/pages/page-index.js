@@ -1,5 +1,6 @@
 import { webc } from 'marycat'
 import { Button } from '../components/button'
+import { Progress } from '../components/progress';
 import css from './page-index.css'
 
 const lecture = (title = '', summary = '') =>
@@ -8,13 +9,7 @@ const lecture = (title = '', summary = '') =>
       (div('.lecture-title')(title))
       (div('.lecture-summary')(summary))
     )
-    (div('.lecture-stats')
-      (span('.done'))
-      (span('.done'))
-      (span())
-      (span())
-      (span())
-    )
+    (Progress().max(5).done([0, 2]))
   )
 
 export const pageIndex = webc({

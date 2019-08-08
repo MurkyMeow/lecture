@@ -49,24 +49,6 @@ section {
   color: rgba(255, 255, 255, .65);
   letter-spacing: 1px;
 }
-.lecture-stats {
-  display: flex;
-  padding: 10px 10px 7px;
-  border-radius: 5px;
-  border: 1px solid #d3d3d3;
-  & span {
-    flex: 1;
-    height: 5px;
-    border-radius: 5px;
-    background: #d3d3d3;
-    &.done {
-      background: #808080;
-    }
-    &:not(:last-child) {
-      margin-right: 2px;
-    }
-  }
-}
 .link {
   font-size: .85em;
   display: block;
