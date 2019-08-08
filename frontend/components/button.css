@@ -6,8 +6,10 @@ span {
   display: block;
   cursor: pointer;
   text-align: center;
+  height: 100%;
   padding: .25em .625em;
   border-radius: 5px;
   background: linear-gradient(to right, #20a5cb, #1d87cc);
+  box-sizing: border-box;
   transition: background-color .1s;
 }

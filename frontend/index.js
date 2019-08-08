@@ -13,6 +13,7 @@ window.main = el('main')
 window.button = el('button')
 window.header = el('header')
 window.section = el('section')
+window.textarea = el('textarea')
 window.form = form
 window.input = input
 

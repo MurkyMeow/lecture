@@ -1,0 +1,61 @@
+:host {
+  position: fixed;
+  top: 0; bottom: 0; left: 0; right: 0;
+  z-index: 1;
+  background: rgb(0, 0, 0, .5);
+}
+lecture-progress {
+  border: none;
+}
+.wrapper {
+  max-width: 600px;
+  margin: 50px auto;
+  background: #fff;
+}
+.content {
+  position: relative;
+  text-align: center;
+}
+.lesson-name {
+  font-size: 1.2em;
+}
+.course-name {
+  color: #c4c4c4;
+}
+.lesson-text {
+  margin: 20px 30px;
+}
+.comment-box {
+  font-size: .9em;
+}
+.comment-input {
+  display: flex;
+  border-top: 1px solid #d3d3d3;
+  border-bottom: 1px solid #d3d3d3;
+  & > * {
+    height: 2em;
+  }
+  & textarea {
+    font: inherit;
+    resize: none;
+    display: inline-block;
+    width: 100%;
+    margin: 0;
+    padding: 3px 10px;
+    border: none;
+    box-sizing: border-box;
+  }
+}
+.comment {
+  display: flex;
+  padding: 10px;
+  border-bottom: 1px solid #d3d3d3;
+  & img {
+    width: 40px;
+    height: 40px;
+    margin-right: 5px;
+  }
+}
+.comment-author {
+  font-weight: bold;
+}

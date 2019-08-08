@@ -1,5 +1,6 @@
 import { webc } from 'marycat'
 import { Button } from '../components/button'
+import { Lesson } from '../components/lesson';
 import { Progress } from '../components/progress';
 import css from './page-index.css'
 
@@ -17,6 +18,7 @@ export const pageIndex = webc({
   css,
   render: h => (h
     (div('.content')
+      (Lesson())
       (h1('Линейная алгебра (0 / 20)'))
       (section()
         (lecture('В жизни не пригодится?', 'Мотивация, примеры'))
