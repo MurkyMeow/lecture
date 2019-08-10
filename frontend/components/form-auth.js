@@ -4,8 +4,7 @@ import { Toggle } from './toggle'
 import css from './form-auth.css'
 import * as api from '../api'
 
-export const FormAuth = webc({
-  name: 'lecture-form-auth',
+export const FormAuth = webc('lecture-form-auth', {
   css,
   props: {
     signup: true,

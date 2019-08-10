@@ -1,8 +1,7 @@
 import { webc, iter } from 'marycat'
 import css from './progress.css'
 
-export const Progress = webc({
-  name: 'lecture-progress',
+export const Progress = webc('lecture-progress', {
   css,
   props: {
     max: 4,

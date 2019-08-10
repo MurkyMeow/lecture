@@ -1,4 +1,4 @@
-import { State, webc, iter } from 'marycat'
+import { State, webc, iter, textarea } from 'marycat'
 import { Button } from './button';
 import { Progress } from './progress';
 import css from './lesson.css'
@@ -14,8 +14,7 @@ const comments = new State([
   },
 ])
 
-export const Lesson = webc({
-  name: 'lecture-lesson',
+export const Lesson = webc('lecture-lesson', {
   css,
   props: {
     slide: 0,
@@ -36,7 +35,7 @@ export const Lesson = webc({
       )
       (div('.comment-box')
         (div('.comment-input')
-          (textarea().attr('placeholder', 'Оставить комментарий'))
+          (textarea().placeholder('Оставить комментарий'))
           (Button().text('📡'))
         )
         (iter(comments, x =>

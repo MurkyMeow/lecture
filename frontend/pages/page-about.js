@@ -1,7 +1,6 @@
 import { webc } from 'marycat'
 
-export const pageAbout = webc({
-  name: 'lecture-page-about',
+export const pageAbout = webc('lecture-page-about', {
   render: h => (h
     (div('About page!'))
   ),

@@ -13,8 +13,7 @@ const lecture = (title = '', summary = '') =>
     (Progress().max(5).done([0, 2]))
   )
 
-export const pageIndex = webc({
-  name: 'lecture-page-index',
+export const pageIndex = webc('lecture-page-index', {
   css,
   render: h => (h
     (div('.content')

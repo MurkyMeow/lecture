@@ -1,8 +1,7 @@
 import { State, webc, iter } from 'marycat'
 import css from './toggle.css'
 
-export const Toggle = webc({
-  name: 'lecture-toggle',
+export const Toggle = webc('lecture-toggle', {
   css,
   props: {
     between: [],
