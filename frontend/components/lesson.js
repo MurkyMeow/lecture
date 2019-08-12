@@ -1,6 +1,6 @@
 import { State, webc, iter, textarea } from 'marycat'
-import { Button } from './button';
-import { Progress } from './progress';
+import { Button } from './button'
+import { Progress } from './progress'
 import css from './lesson.css'
 
 const comments = new State([
@@ -18,8 +18,9 @@ export const Lesson = webc('lecture-lesson', {
   css,
   props: {
     slide: 0,
+    data: {},
   },
-  render: (h, { slide }) => (h
+  render: (h, { slide, data }) => (h
     (div('.wrapper').tabindex(0)
       .keydown(e => {
         switch (e.code) {
@@ -29,9 +30,9 @@ export const Lesson = webc('lecture-lesson', {
       })
       (div('.content')
         (Progress().max(5).active(slide))
-        (div('.lesson-name')('В жизни не пригодится?'))
-        (div('.course-name')('Линейная алгебра'))
-        (div('.lesson-text')('Lorem ipsum, dolor sit amet consectetur adipisicing elit.'))
+        (iframe().attr('src', slide.after(v =>
+          `/course/${data.v.name}/${data.v.index + 1}/#${v}`)
+        ))
       )
       (div('.comment-box')
         (div('.comment-input')
@@ -49,5 +50,9 @@ export const Lesson = webc('lecture-lesson', {
         ))
       )
     )
+    ($el => {
+      const f = $el.querySelector('iframe')
+      f.onload = () => f.style.height = `${f.contentWindow.innerHeight + 50}px`
+    })
   ),
 })
