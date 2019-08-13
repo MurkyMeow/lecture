@@ -15,15 +15,10 @@ lecture-progress {
 .content {
   position: relative;
   text-align: center;
-}
-.lesson-name {
-  font-size: 1.2em;
-}
-.course-name {
-  color: #c4c4c4;
-}
-.lesson-text {
-  margin: 20px 30px;
+  & iframe {
+    width: calc(100% - 40px);
+    border: none;
+  }
 }
 .comment-box {
   font-size: .9em;

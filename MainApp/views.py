@@ -1,3 +1,7 @@
 from django.shortcuts import render
 
-# Create your views here.
+def LectureView(request, course, lecture):
+    return render(request, 'lecture-temlpate.html', context={
+      'course': course,
+      'lecture': lecture,
+    })

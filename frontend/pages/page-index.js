@@ -1,39 +1,41 @@
-import { webc } from 'marycat'
+import { State, webc, iter, _if } from 'marycat'
 import { Button } from '../components/button'
 import { Lesson } from '../components/lesson';
 import { Progress } from '../components/progress';
+import { get } from '../api'
 import css from './page-index.css'
 
-const lecture = (title = '', summary = '') =>
-  (div('.lecture')
-    (div('.lecture-info')
-      (div('.lecture-title')(title))
-      (div('.lecture-summary')(summary))
+const lecture = (obj, onclick) =>
+  (div('.lecture').click(onclick)
+    (div('.lecture-info').style('background', obj._`background`)
+      (div('.lecture-title')(obj._`title`))
+      (pre('.lecture-summary')(obj._`subtitle`))
     )
     (Progress().max(5).done([0, 2]))
   )
 
 export const pageIndex = webc('lecture-page-index', {
   css,
-  render: h => (h
+  async init() {
+    this.lecture = new State(null)
+    this.courses = new State({})
+    this.courses.v = await get('/static/preview.json')
+  },
+  render(h) {
+    return h
     (div('.content')
-      (Lesson())
-      (h1('Линейная алгебра (0 / 20)'))
-      (section()
-        (lecture('В жизни не пригодится?', 'Мотивация, примеры'))
-        (lecture('Что такое вектор', '(🐺, 🐐, 🥦)'))
-        (lecture('Что такое матрица', [
-          div('(1, 0, 1)'),
-          div('(️0, 1, 1)'),
-          div('(️1, 1, 0)'),
-        ]))
+      (_if(this.lecture)
+        (Lesson().data(this.lecture).stop().click(_=>_))
       )
-      (Button()('.link').text('Показать все'))
-      (h1('Дискретный анализ (0 / 15)'))
-      (section()
-        (lecture())
-        (lecture())
-      )
+      (iter(this.courses.keys, key =>
+        (article()
+          (h1(key))
+          (section(iter(this.courses._`${key}`, (lec, i) =>
+            lecture(lec, () => this.lecture.v = { ...lec.v, name: key.v, index: i.v })
+          )))
+        )
+      ))
+      (Button('.link').text('Показать все'))
     )
-  ),
+  },
 })

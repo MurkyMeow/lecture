@@ -19,13 +19,6 @@ section {
 .lecture {
   cursor: pointer;
   user-select: none;
-  --bg: linear-gradient(to right, #ffa992, #ff4cba);
-  &:nth-child(2) {
-    --bg: linear-gradient(to right, #7d2186, #e51ba5);
-  }
-  &:nth-child(3) {
-    --bg: linear-gradient(to right, #5389fd, #6e66ff);
-  }
 }
 .lecture-info {
   color: #fff;
@@ -35,7 +28,6 @@ section {
   flex-direction: column;
   height: 120px;
   border-radius: 5px;
-  background: var(--bg);
   transform: translateY(5px);
   &:hover {
     filter: brightness(1.1);
@@ -46,8 +38,10 @@ section {
   font-style: italic;
 }
 .lecture-summary {
+  font: inherit;
   color: rgba(255, 255, 255, .65);
   letter-spacing: 1px;
+  margin: 0;
 }
 .link {
   font-size: .85em;

@@ -1,6 +1,6 @@
 import { State, webc, iter, textarea } from 'marycat'
-import { Button } from './button';
-import { Progress } from './progress';
+import { Button } from './button'
+import { Progress } from './progress'
 import css from './lesson.css'
 
 const comments = new State([
@@ -18,20 +18,31 @@ export const Lesson = webc('lecture-lesson', {
   css,
   props: {
     slide: 0,
+    data: {},
   },
-  render: (h, { slide }) => (h
+  render(h, { slide, data }) {
+    const { name, index } =  data.v
+    const slides = new State(0)
+    const onload = async ({ target }) => {
+      await target.contentWindow.load
+      slides.v = target.contentWindow.slides.length
+    }
+    return h
     (div('.wrapper').tabindex(0)
       .keydown(e => {
         switch (e.code) {
           case 'ArrowLeft': return slide.v > 0 && slide.v--
-          case 'ArrowRight': return slide.v < 5 - 1 && slide.v++
+          case 'ArrowRight': return slide.v < slides.v - 1 && slide.v++
         }
       })
       (div('.content')
-        (Progress().max(5).active(slide))
-        (div('.lesson-name')('В жизни не пригодится?'))
-        (div('.course-name')('Линейная алгебра'))
-        (div('.lesson-text')('Lorem ipsum, dolor sit amet consectetur adipisicing elit.'))
+        (Progress().max(slides).active(slide)
+          .on('change', e => slide.v = e.detail)
+        )
+        (iframe().on('load', onload)
+          .attr('height', '300px')
+          .attr('src', slide.after(v => `/course/${name}/${index + 1}/#${v}`))
+        )
       )
       (div('.comment-box')
         (div('.comment-input')
@@ -49,5 +60,5 @@ export const Lesson = webc('lecture-lesson', {
         ))
       )
     )
-  ),
+  },
 })
