@@ -36,12 +36,14 @@ section {
 .lecture-title {
   font-size: 1.3em;
   font-style: italic;
+  text-align: center;
 }
 .lecture-summary {
   font: inherit;
   color: rgba(255, 255, 255, .65);
   letter-spacing: 1px;
   margin: 0;
+  &:empty { height: 0; }
 }
 .link {
   font-size: .85em;

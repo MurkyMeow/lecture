@@ -8,8 +8,8 @@ import css from './page-index.css'
 const lecture = (obj, onclick) =>
   (div('.lecture').click(onclick)
     (div('.lecture-info').style('background', obj._`background`)
-      (div('.lecture-title')(obj._`title`))
-      (pre('.lecture-summary')(obj._`subtitle`))
+      (div('.lecture-title')(obj._`title`.or('')))
+      (pre('.lecture-summary')(obj._`subtitle`.or('')))
     )
     (Progress().max(5).done([0, 2]))
   )
