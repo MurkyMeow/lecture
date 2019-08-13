@@ -5,15 +5,6 @@ import { Progress } from '../components/progress';
 import { get } from '../api'
 import css from './page-index.css'
 
-const lecture = (obj, onclick) =>
-  (div('.lecture').click(onclick)
-    (div('.lecture-info').style('background', obj._`background`)
-      (div('.lecture-title')(obj._`title`.or('')))
-      (pre('.lecture-summary')(obj._`subtitle`.or('')))
-    )
-    (Progress().max(5).done([0, 2]))
-  )
-
 export const pageIndex = webc('lecture-page-index', {
   css,
   async init() {
@@ -25,13 +16,22 @@ export const pageIndex = webc('lecture-page-index', {
     return h
     (div('.content')
       (_if(this.lecture)
-        (Lesson().data(this.lecture).stop().click(_=>_))
+        (Lesson().data(this.lecture)
+          .on('hide', () => this.lecture.v = null)
+        )
       )
       (iter(this.courses.keys, key =>
         (article()
           (h1(key))
           (section(iter(this.courses._`${key}`, (lec, i) =>
-            lecture(lec, () => this.lecture.v = { ...lec.v, name: key.v, index: i.v })
+            (div('.lecture')
+              .click(() => this.lecture.v = { ...lec.v, name: key.v, index: i.v })
+              (div('.lecture-info').style('background', lec._`background`)
+                (div('.lecture-title')(lec._`title`.or('')))
+                (pre('.lecture-summary')(lec._`subtitle`.or('')))
+              )
+              (Progress().max(5).done([0, 2]))
+            )
           )))
         )
       ))
