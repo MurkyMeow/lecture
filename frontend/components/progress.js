@@ -15,7 +15,7 @@ export const Progress = webc('lecture-progress', {
       const isdone = done.after(v => v.includes(i.v))
       const isactive = active.eq(i)
       return (span()
-        .click(() => active.v = i.v)
+        .click(() => this.emit('change', i.v))
         .attr('data-done', isdone)
         .attr('data-active', isactive)
       )

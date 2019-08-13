@@ -20,19 +20,29 @@ export const Lesson = webc('lecture-lesson', {
     slide: 0,
     data: {},
   },
-  render: (h, { slide, data }) => (h
+  render(h, { slide, data }) {
+    const { name, index } =  data.v
+    const slides = new State(0)
+    const onload = async ({ target }) => {
+      await target.contentWindow.load
+      slides.v = target.contentWindow.slides.length
+    }
+    return h
     (div('.wrapper').tabindex(0)
       .keydown(e => {
         switch (e.code) {
           case 'ArrowLeft': return slide.v > 0 && slide.v--
-          case 'ArrowRight': return slide.v < 5 - 1 && slide.v++
+          case 'ArrowRight': return slide.v < slides.v - 1 && slide.v++
         }
       })
       (div('.content')
-        (Progress().max(5).active(slide))
-        (iframe().attr('src', slide.after(v =>
-          `/course/${data.v.name}/${data.v.index + 1}/#${v}`)
-        ))
+        (Progress().max(slides).active(slide)
+          .on('change', e => slide.v = e.detail)
+        )
+        (iframe().on('load', onload)
+          .attr('height', '300px')
+          .attr('src', slide.after(v => `/course/${name}/${index + 1}/#${v}`))
+        )
       )
       (div('.comment-box')
         (div('.comment-input')
@@ -50,9 +60,5 @@ export const Lesson = webc('lecture-lesson', {
         ))
       )
     )
-    ($el => {
-      const f = $el.querySelector('iframe')
-      f.onload = () => f.style.height = `${f.contentWindow.innerHeight + 50}px`
-    })
-  ),
+  },
 })
