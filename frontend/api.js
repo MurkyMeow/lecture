@@ -1,3 +1,9 @@
+function get_cookie(name) {
+  const entries = document.cookie.split('=')
+  const idx = entries.findIndex((el, i) => i % 2 === 0 && el === name)
+  return entries[idx + 1] || null
+}
+
 const get = (url, opts = {}) =>
   fetch(url, {
     credentials: 'include',
@@ -14,7 +20,10 @@ const del = url =>
 
 const post = (url, body, opts = {}) => get(url, {
   method: 'POST',
-  body: JSON.stringify(body),
+  body: JSON.stringify({
+    ...body,
+    csrfmiddlewaretoken: get_cookie('csrftoken'),
+  }),
   ...opts,
 })
 
