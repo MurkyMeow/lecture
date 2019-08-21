@@ -9,7 +9,8 @@ from rest_framework.response import Response
 
 def credentials(req, user):
     login(req, user)
-    return Response(status=status.HTTP_200_OK)
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def SignupView(request):
