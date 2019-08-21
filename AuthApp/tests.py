@@ -28,3 +28,4 @@ class AccountTests(APITestCase):
         data = {'email': 'hello@gmail.com', 'password': 'blablabla123'}
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response[0]['password'], 'blablabla123')

@@ -6,18 +6,20 @@ from django.core.exceptions import ValidationError
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from .serializers import *
 # Create your views here.
 
 def credentials(req, user):
     login(req, user)
-    return Response(status=status.HTTP_200_OK)
+    serializer = UserSerializer(user)
+    return Response(serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def SignupView(request):
     username = request.data.get('name')
     email = request.data.get('email')
     password = request.data.get('password')
-    if User.objects.filter(Q(email=email) | Q(username=name)).exists():
+    if User.objects.filter(Q(email=email) | Q(username=username)).exists():
         return Response(status=status.HTTP_409_CONFLICT)
     try:
         validate_password(password)
