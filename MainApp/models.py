@@ -35,6 +35,7 @@ class Comment(models.Model):
     lecture_id = models.IntegerField()
     slide_id = models.IntegerField()
     text = models.TextField()
+    published = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Comment"

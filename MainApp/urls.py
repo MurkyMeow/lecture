@@ -3,4 +3,5 @@ from .views import *
 
 urlpatterns = [
     path('<str:course>/<int:lecture>/', LectureView),
+    path('comments/', APIComments),
 ]
