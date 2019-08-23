@@ -15,22 +15,22 @@ class CommentsTests(APITestCase):
             username=user['name'], email=user['email'], password=user['password']
         )
         self.comments = [
-            Comment.objects.create(user_id=u, lecture_id=1, slide_id=1, text='foo'),
-            Comment.objects.create(user_id=u, lecture_id=1, slide_id=1, text='bar'),
+            Comment.objects.create(user=u, lecture_id=1, slide_id=1, text='foo'),
+            Comment.objects.create(user=u, lecture_id=1, slide_id=1, text='bar'),
         ]
         self.client.force_authenticate(u)
 
     def test_get_comments(self):
-        params = { 'lectureID': 1, 'slideID': 1 }
+        params = { 'lecture_id': 1, 'slide_id': 1 }
         res = self.client.get('/course/comments/', params)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), len(self.comments))
 
     def test_create_comment(self):
-        comment = { 'lectureID': 2, 'slideID': 1, 'text': 'qwerqwer' }
+        comment = { 'lecture_id': 2, 'slide_id': 1, 'text': 'qwerqwer' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
-        self.assertEqual(res.data['slide_id'], comment['slideID'])
-        self.assertEqual(res.data['lecture_id'], comment['lectureID'])
+        self.assertEqual(res.data['slide_id'], comment['slide_id'])
+        self.assertEqual(res.data['lecture_id'], comment['lecture_id'])
 

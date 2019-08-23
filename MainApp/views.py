@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import Comment
-from .serializers import CommentSerializer
+from .models import *
+from .serializers import *
 
 def LectureView(request, course, lecture):
     return render(request, 'lecture-temlpate.html', context={
@@ -15,9 +15,9 @@ def LectureView(request, course, lecture):
 class APIComments(APIView):
     def post(self, request):
         new_comment = Comment.objects.create(
-            user_id=request.user,
-            lecture_id=request.data.get('lectureID'),
-            slide_id=request.data.get('slideID'),
+            user=request.user,
+            lecture_id=request.data.get('lecture_id'),
+            slide_id=request.data.get('slide_id'),
             text=request.data.get('text'),
         )
         serializer = CommentSerializer(new_comment)
@@ -25,20 +25,37 @@ class APIComments(APIView):
 
     def get(self, request):
         comments = Comment.objects.filter(
-            lecture_id=request.data.get('lectureID'),
-            slide_id=request.data.get('slideID'),
+            lecture_id=request.data.get('lecture_id'),
+            slide_id=request.data.get('slide_id'),
         )
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
 
     def patch(self, request):
-        comment = Comment.objects.get(pk=request.data.get('commentID'))
+        comment = Comment.objects.get(pk=request.data.get('comment_id'))
         comment.text = request.data.get('text')
         comment.save()
         serializer = CommentSerializer(comment)
         return Response(serializer.data)
 
     def delete(self, request):
-        comment = Comment.objects.get(pk=request.data.get('commentID'))
+        comment = Comment.objects.get(pk=request.data.get('comment_id'))
         comment.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class APIProgress(APIView):
+    def post(self, request):
+        new_progress = Progress.objects.create(
+            user=request.user,
+            lecture_id=request.data.get('lecture_id'),
+            slide_id=request.data.get('slide_id'),
+        )
+        serializer = ProgressSerializer(new_progress)
+        return Response(serializer.data)
+
+    def get(self, request):
+        progress = Progress.objects.filter(
+            user=request.user
+        )
+        serializer = ProgressSerializer(progress, many=True)
+        return Response(serializer.data)
