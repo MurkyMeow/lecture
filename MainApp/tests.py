@@ -30,4 +30,7 @@ class CommentsTests(APITestCase):
         comment = { 'lectureID': 2, 'slideID': 1, 'text': 'qwerqwer' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['text'], comment['text'])
+        self.assertEqual(res.data['slide_id'], comment['slideID'])
+        self.assertEqual(res.data['lecture_id'], comment['lectureID'])
 
