@@ -3,8 +3,8 @@ from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from .models import *
-from .serializers import *
+from .models import Comment
+from .serializers import CommentSerializer
 
 def LectureView(request, course, lecture):
     return render(request, 'lecture-temlpate.html', context={
