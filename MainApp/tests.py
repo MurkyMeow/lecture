@@ -14,7 +14,17 @@ class CommentsTests(APITestCase):
         u = User.objects.create(
             username=user['name'], email=user['email'], password=user['password']
         )
+        self.comments = [
+            Comment.objects.create(user_id=u, lecture_id=1, slide_id=1, text='foo'),
+            Comment.objects.create(user_id=u, lecture_id=1, slide_id=1, text='bar'),
+        ]
         self.client.force_authenticate(u)
+
+    def test_get_comments(self):
+        params = { 'lectureID': 1, 'slideID': 1 }
+        res = self.client.get('/course/comments/', params)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(len(res.data), len(self.comments))
 
     def test_create_comment(self):
         comment = { 'lectureID': 2, 'slideID': 1, 'text': 'qwerqwer' }
