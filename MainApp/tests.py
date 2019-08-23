@@ -34,3 +34,13 @@ class CommentsTests(APITestCase):
         self.assertEqual(res.data['slide_id'], comment['slide_id'])
         self.assertEqual(res.data['lecture_id'], comment['lecture_id'])
 
+    def test_patch_comment(self):
+        comment = { 'text': 'qwerqwer', 'comment_id': 1 }
+        res = self.client.patch('/course/comments/', comment)
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.data['text'], comment['text'])
+
+    def test_delete_comment(self):
+        comment = { 'comment_id': 1 }
+        res = self.client.delete('/course/comments/', comment)
+        self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)

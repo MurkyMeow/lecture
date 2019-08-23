@@ -4,9 +4,9 @@ from .models import *
 class CommentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Comment
-        fields = ('id', 'user', 'lecture_id', 'slide_id', 'text', 'published')
+        fields = '__all__'
 
 class ProgressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Progress
-        fields = ('id', 'user', 'lecture_id', 'slide_id')
+        fields = '__all__'

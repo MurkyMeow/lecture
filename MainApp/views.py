@@ -25,8 +25,8 @@ class APIComments(APIView):
 
     def get(self, request):
         comments = Comment.objects.filter(
-            lecture_id=request.data.get('lecture_id'),
-            slide_id=request.data.get('slide_id'),
+            lecture_id=request.GET.get('lecture_id'),
+            slide_id=request.GET.get('slide_id'),
         )
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
