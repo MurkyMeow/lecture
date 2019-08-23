@@ -6,21 +6,15 @@ export const Toggle = webc('lecture-toggle', {
   props: {
     between: [],
   },
-  init() {
-    this.index = new State(0)
-  },
   render(h, { between }) {
-    const change = () => {
-      this.index.v = (this.index.v + 1) % between.v.length
-    }
-    return h.click(change)
+    const index = new State(0)
+    return h
+    .click(() => {
+      index.v = (index.v + 1) % between.v.length
+      h.emit('change', between.v[index.v])
+    })
     (iter(between, (item, i) =>
-      span(item.v).class(this.index.eq(i).tern('active', ''))
+      span(item.v).class(index.eq(i).tern('active', ''))
     ))
-  },
-  bind(state) {
-    const { index, props } = this
-    index.sub(i => state.v = props.between.v[i])
-    return this
   },
 })

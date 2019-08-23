@@ -27,11 +27,9 @@ export const Lesson = webc('lecture-lesson', {
       await target.contentWindow.load
       slides.v = target.contentWindow.slides.length
     }
-    h($el => { // marycat, please fix
-      $el.host.addEventListener('click', () => this.emit('hide'))
-    })
     return h
-    (div('.wrapper').prevent().stop().click(_=>_)
+    .click(() => h.emit('hide'))
+    (div('.wrapper').stop().click(_=>_)
       .tabindex(0)
       .keydown(e => {
         switch (e.code) {
