@@ -32,7 +32,7 @@ def SignupView(request):
         validate_password(password)
     except ValidationError:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.create(email=email, password=password, username=name)
+    user = User.objects.create_user(email=email, password=password, username=name)
     return credentials(request, user)
 
 @api_view(['POST'])
