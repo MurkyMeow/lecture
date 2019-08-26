@@ -27,7 +27,7 @@ class CommentsTests(APITestCase):
         self.assertEqual(len(res.data), len(self.comments))
 
     def test_create_comment(self):
-        comment = { 'user': User.objects.get(email=user['email']), 'lecture_id': 2, 'slide_id': 1, 'text': 'qwerqwer' }
+        comment = { 'lecture_id': 2, 'slide_id': 1, 'text': 'qwerqwer' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
@@ -57,7 +57,7 @@ class CommentsValidatonTests(APITestCase):
         self.client.force_authenticate(u)
 
     def test_create_comment(self):
-        comment = { 'user': User.objects.get(email=user['email']) ,'lecture_id': 1, 'slide_id': 1, 'text': '' }
+        comment = { 'lecture_id': 1, 'slide_id': 1, 'text': '' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_406_NOT_ACCEPTABLE)
 
