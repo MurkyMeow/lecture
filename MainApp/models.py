@@ -31,22 +31,23 @@ class Answer(models.Model):
 
 class Comment(models.Model):
 
-    user_id = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     lecture_id = models.IntegerField()
     slide_id = models.IntegerField()
     text = models.TextField()
+    published = models.DateTimeField(auto_now=True)
 
     class Meta:
         verbose_name = "Comment"
         verbose_name_plural = "Comments"
 
     def __str__(self):
-        return self.user_id, text 
+        return self.user, text 
 
 
 class Progress(models.Model):
 
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     lecture_id = models.IntegerField()
     slide_id = models.IntegerField()
 
@@ -55,4 +56,4 @@ class Progress(models.Model):
         verbose_name_plural = "Progress"
 
     def __str__(self):
-        return self.user_id
+        return self.user
