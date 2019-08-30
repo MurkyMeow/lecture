@@ -51,3 +51,9 @@ def SigninView(request):
 def LogoutView(request):
     logout(request)
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def UserDataView(request):
+    if request.user.last_login == None:
+        return Response(status=status.HTTP_403_FORBIDDEN)
+    return Response({ 'name': request.user.username, 'email': request.user.email })
