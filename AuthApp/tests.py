@@ -10,7 +10,7 @@ user = {
 
 class AccountTests(APITestCase):
     def setUp(self):
-        User.objects.create(
+        User.objects.create_user(
             username=user['name'], email=user['email'], password=user['password']
         )
 
@@ -34,11 +34,11 @@ class AccountTests(APITestCase):
             'name': user['name'], 'email': 'z', 'password': 'z',
         })
         self.assertEqual(name.status_code, status.HTTP_409_CONFLICT)
-        self.assertEqual(name.data['conflict']['name'], True)
+        self.assertEqual(name.data['name'], True)
 
     def test_signup_email_conflict(self):
         email = self.client.post('/auth/signup/', {
             'email': user['email'], 'name': 'z', 'password': 'z',
         })
         self.assertEqual(email.status_code, status.HTTP_409_CONFLICT)
-        self.assertEqual(email.data['conflict']['email'], True)
+        self.assertEqual(email.data['email'], True)
