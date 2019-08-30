@@ -18,9 +18,11 @@ export const FormAuth = webc('lecture-form-auth', {
       try {
         await api.post(url, data.v)
       } catch (err) {
+        errors.v = {}
         if (err.status !== 409) return errors._`main`.v = 'Не удаётся войти'
-        errors._`email`.v = 'Email занят'
-        errors._`name`.v = 'Никнейм занят'
+        const conflict = await err.json()
+        if (conflict.email) errors._`email`.v = 'Email занят'
+        if (conflict.name) errors._`name`.v = 'Никнейм занят'
       }
     }
     return h
