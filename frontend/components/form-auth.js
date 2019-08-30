@@ -16,13 +16,18 @@ export const FormAuth = webc('lecture-form-auth', {
     const submit = async () => {
       const url = `/auth/${option.v === '👽' ? 'signup' : 'signin'}/`
       try {
+        errors.v = {}
         await api.post(url, data.v)
       } catch (err) {
-        errors.v = {}
-        if (err.status !== 409) return errors._`main`.v = 'Не удаётся войти'
-        const conflict = await err.json()
-        if (conflict.email) errors._`email`.v = 'Email занят'
-        if (conflict.name) errors._`name`.v = 'Никнейм занят'
+        if (err.status === 404) {
+          errors._`main`.v = 'Неверный логин или пароль'
+        } else if (err.status === 409) {
+          const conflict = await err.json()
+          if (conflict.email) errors._`email`.v = 'Email занят'
+          if (conflict.name) errors._`name`.v = 'Никнейм занят'
+        } else {
+          errors._`main`.v = 'Не удаётся войти'
+        }
       }
     }
     return h

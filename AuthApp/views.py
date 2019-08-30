@@ -39,7 +39,10 @@ def SigninView(request):
     password = request.data.get('password')
     if not email or not password:
         return Response(status=status.HTTP_400_BAD_REQUEST)
-    user = User.objects.get(email=email)
+    try:
+        user = User.objects.get(email=email)
+    except User.DoesNotExist:
+        return Response(status=status.HTTP_404_NOT_FOUND)
     if user.password == password:
         return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
