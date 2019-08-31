@@ -1,6 +1,7 @@
 import { webc, _if, State } from 'marycat'
 import { Button } from './button'
 import { Toggle } from './toggle'
+import { store } from '../store'
 import css from './form-auth.css'
 import * as api from '../api'
 
@@ -17,7 +18,7 @@ export const FormAuth = webc('lecture-form-auth', {
       const url = `/auth/${option.v === '👽' ? 'signup' : 'signin'}/`
       try {
         errors.v = {}
-        await api.post(url, data.v)
+        store.user.v = await api.post(url, data.v)
       } catch (err) {
         if (err.status === 404) {
           errors._`main`.v = 'Неверный логин или пароль'
@@ -58,7 +59,7 @@ export const FormAuth = webc('lecture-form-auth', {
         )
       )
       (button()
-        (Button().text('Продолжить').click(submit))
+        (Button().text('Продолжить'))
       )
     )
   },

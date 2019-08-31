@@ -1,4 +1,5 @@
-import { State, el, _if, form, input, fragment } from 'marycat'
+import { el, _if, form, input, fragment } from 'marycat'
+import { store } from './store'
 import { Button } from './components/button'
 import { FormAuth } from './components/form-auth'
 import * as router from './router'
@@ -21,19 +22,19 @@ window.input = input
 
 router.update()
 
-const user = new State(null)
-
 const app = fragment()
   (header('.header')
     (div('.header-logo')('🌌 Lecture'))
     (div('.header-auth')
-      (_if(user)
-        (Button().text('username'))
+      (_if(store.user)
+        (Button().text(store.user.or({})._`username`))
       .else()
         (Button().text('Войти'))
       )
     )
-    (FormAuth().tabindex(0))
+    (_if(store.user.not())
+      (FormAuth().tabindex(0))
+    )
   )
   (main()
     (router.element)
