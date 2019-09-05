@@ -3,7 +3,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from django.contrib.auth.hashers import check_password
 from .serializers import *
@@ -52,8 +53,7 @@ def LogoutView(request):
     logout(request)
     return Response(status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def UserDataView(request):
-    if request.user.last_login == None:
-        return Response(status=status.HTTP_403_FORBIDDEN)
     return Response({ 'name': request.user.username, 'email': request.user.email })
