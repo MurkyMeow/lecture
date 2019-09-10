@@ -1,11 +1,12 @@
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import User
-from django.db.models import Q
 from django.contrib.auth.password_validation import validate_password
 from django.core.exceptions import ValidationError
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.contrib.auth.hashers import check_password
 from .serializers import *
 
 def credentials(req, user):
@@ -43,7 +44,7 @@ def SigninView(request):
         user = User.objects.get(email=email)
     except User.DoesNotExist:
         return Response(status=status.HTTP_404_NOT_FOUND)
-    if user.password == password:
+    if check_password(password, user.password):
         return credentials(request, user)
     return Response(status=status.HTTP_403_FORBIDDEN)
 
@@ -51,3 +52,9 @@ def SigninView(request):
 def LogoutView(request):
     logout(request)
     return Response(status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def UserDataView(request):
+    user = UserSerializer(request.user)
+    return Response(user.data)
