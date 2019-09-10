@@ -2,6 +2,7 @@ import { el, _if, form, input, fragment } from 'marycat'
 import { store } from './store'
 import { Button } from './components/button'
 import { FormAuth } from './components/form-auth'
+import { get } from './api'
 import * as router from './router'
 
 import './index.css';
@@ -22,12 +23,21 @@ window.input = input
 
 router.update()
 
+get('/auth/userdata/')
+  .then(data => store.user.v = data)
+  .catch(_=>_)
+
+const logout = () =>
+  get('/auth/logout/')
+    .then(() => store.user.v = null)
+
 const app = fragment()
   (header('.header')
     (div('.header-logo')('🌌 Lecture'))
     (div('.header-auth')
       (_if(store.user)
         (Button().text(store.user.or({})._`username`))
+        (Button().text('Выйти').click(logout))
       .else()
         (Button().text('Войти'))
       )
