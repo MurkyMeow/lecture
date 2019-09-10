@@ -11,9 +11,11 @@ const get = (url, opts = {}) =>
     headers: { 'Content-Type': 'application/json' },
     ...opts,
   }).then(res => {
-    if (!res.ok) throw res;
-    return res.json();
-  });
+    if (!res.ok) throw res
+    return res.headers.get('Content-Type') === 'application/json'
+      ? res.json()
+      : res.text()
+  })
 
 const del = url =>
   get(url, { method: 'DELETE' })
