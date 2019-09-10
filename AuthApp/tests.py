@@ -1,6 +1,7 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
 from django.contrib.auth.models import User
+from .serializers import UserSerializer
 
 user = {
     'name': 'Test',
@@ -10,7 +11,7 @@ user = {
 
 class AccountTests(APITestCase):
     def setUp(self):
-        User.objects.create_user(
+        self.user = User.objects.create_user(
             username=user['name'], email=user['email'], password=user['password']
         )
 
@@ -42,3 +43,10 @@ class AccountTests(APITestCase):
         })
         self.assertEqual(email.status_code, status.HTTP_409_CONFLICT)
         self.assertEqual(email.data['email'], True)
+
+    def test_user_data(self):
+        self.client.force_authenticate(self.user)
+        expected = UserSerializer(self.user)
+        res = self.client.get('/auth/userdata/')
+        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertDictEqual(res.data, expected.data)

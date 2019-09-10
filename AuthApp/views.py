@@ -53,7 +53,8 @@ def LogoutView(request):
     logout(request)
     return Response(status=status.HTTP_200_OK)
 
-@api_view(['GET', 'POST'])
+@api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def UserDataView(request):
-    return Response({ 'name': request.user.username, 'email': request.user.email })
+    user = UserSerializer(request.user)
+    return Response(user.data)
