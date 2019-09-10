@@ -46,9 +46,9 @@ def SigninView(request):
         return Response(status=status.HTTP_404_NOT_FOUND)
     if check_password(password, user.password):
         return credentials(request, user)
-    return Response(status=status.HTTP_403_FORBIDDEN)
+    return Response({ error: 'Invalid login' }, status=status.HTTP_403_FORBIDDEN)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def LogoutView(request):
     logout(request)
     return Response(status=status.HTTP_200_OK)
