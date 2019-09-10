@@ -8,10 +8,13 @@ const get = (url, opts = {}) =>
   fetch(url, {
     credentials: 'include',
     method: 'GET',
-    headers: { 'Content-Type': 'application/json' },
+    headers: {
+      'Content-Type': 'application/json',
+      'X-CSRFToken': get_cookie('csrftoken'),
+    },
     ...opts,
   }).then(res => {
-    if (!res.ok) throw res
+    if (!res.ok) throw res.statusText || res.status
     return res.headers.get('Content-Type') === 'application/json'
       ? res.json()
       : res.text()
@@ -22,10 +25,7 @@ const del = url =>
 
 const post = (url, body, opts = {}) => get(url, {
   method: 'POST',
-  body: JSON.stringify({
-    ...body,
-    csrfmiddlewaretoken: get_cookie('csrftoken'),
-  }),
+  body: JSON.stringify(body),
   ...opts,
 })
 
