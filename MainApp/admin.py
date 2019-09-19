@@ -4,9 +4,9 @@ from .models import *
 # Register your models here.
 
 class ExerciseAdmin(admin.ModelAdmin):
-    list_display = ("for_article", )
-    list_display_links = ("for_article", )
-    search_fields = ("for_article", "task")
+    list_display = ("for_lecture", )
+    list_display_links = ("for_lecture", )
+    search_fields = ("for_lecture", "task")
 
 class AnswerAdmin(admin.ModelAdmin):
     list_display = ("for_exercise", )

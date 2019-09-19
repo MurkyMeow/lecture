@@ -2,9 +2,38 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
+class Course(models.Model):
+
+    name = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.name
+
+
+class Lecture(models.Model):
+
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
+    title = models.CharField(max_length=150)
+    subtitle = models.CharField(max_length=300)
+    background = models.CharField(max_length=50)
+
+    def __str__(self):
+        return self.title
+
+
+class Slide(models.Model):
+
+    lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
+    title =  models.CharField(max_length=150)
+    content = models.TextField()
+
+    def __str__(self):
+        return self.title
+
+
 class Exercise(models.Model):
 
-    for_article = models.IntegerField()
+    for_lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     task = models.TextField()
 
     class Meta:
@@ -12,12 +41,12 @@ class Exercise(models.Model):
         verbose_name_plural = "Exercises"
 
     def __str__(self):
-        return self.name
+        return self.task
 
 
 class Answer(models.Model):
 
-    for_exercise = models.ForeignKey("Exercise", on_delete=models.CASCADE)
+    for_exercise = models.ForeignKey("Exercise", null=True, on_delete=models.CASCADE)
     option = models.CharField(max_length=100)
     correct = models.BooleanField()
 
@@ -26,14 +55,14 @@ class Answer(models.Model):
         verbose_name_plural = "Answers"
 
     def __str__(self):
-        return self.name
+        return self.option, self.for_exercise
 
 
 class Comment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
-    lecture_id = models.IntegerField()
-    slide_id = models.IntegerField()
+    lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
+    slide = models.ForeignKey("Slide", null=True, on_delete=models.CASCADE)
     text = models.TextField()
     published = models.DateTimeField(auto_now=True)
 
@@ -48,12 +77,12 @@ class Comment(models.Model):
 class Progress(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    lecture_id = models.IntegerField()
-    slide_id = models.IntegerField()
+    lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
+    slide = models.ForeignKey("Slide", null=True, on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = "Progress"
         verbose_name_plural = "Progress"
 
     def __str__(self):
-        return self.user
+        return self.user, self.lecture
