@@ -15,7 +15,7 @@ for course in Course.objects.all():
     course.delete()
 for filename in listOfFile:
   new_course = Course.objects.create(name=filename.strip(".json"))
-  with open('{filename}'.format(filename=filename), 'r', encoding='utf-8') as fh:
+  with open('{dir}/{filename}'.format(filename=filename, dir="courses/"), 'r', encoding='utf-8') as fh:
       data = json.load(fh)
   for lecture in data:
       new_lecture = Lecture.objects.create(
