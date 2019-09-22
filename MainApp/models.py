@@ -23,6 +23,7 @@ class Lecture(models.Model):
 
 class Slide(models.Model):
 
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
     lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     title =  models.CharField(max_length=150)
     content = models.TextField()
@@ -61,9 +62,10 @@ class Answer(models.Model):
 class Comment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
     lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     slide = models.ForeignKey("Slide", null=True, on_delete=models.CASCADE)
-    text = models.TextField()
+    text = models.CharField(max_length=1000)
     published = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -71,12 +73,13 @@ class Comment(models.Model):
         verbose_name_plural = "Comments"
 
     def __str__(self):
-        return self.user, text 
+        return self.user, self.text 
 
 
 class Progress(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
     lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     slide = models.ForeignKey("Slide", null=True, on_delete=models.CASCADE)
 

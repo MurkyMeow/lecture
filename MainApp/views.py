@@ -38,32 +38,36 @@ class APIComments(APIView):
         validate_comment(request.data)
         new_comment = Comment.objects.create(
             user=request.user,
-            lecture=request.data.get('lecture'),
-            slide=request.data.get('slide'),
+            course=Course.objects.get(pk=request.GET.get('course_id')),
+            lecture=Lecture.objects.get(pk=request.data.get('lecture_id')),
+            slide=Slide.objects.get(pk=request.data.get('slide_id')),
             text=request.data.get('text'),
         )
         serializer = CommentSerializer(new_comment)
+        serializer.data[0]['user'] = UserSerializer(User.objects.get(pk=serializer.data[0]['user'])).data
         return Response(serializer.data)
 
     def get(self, request):
         comments = Comment.objects.filter(
-            lecture=request.GET.get('lecture'),
-            slide=request.GET.get('slide'),
+            course=Course.objects.get(pk=request.GET.get('course_id')),
+            lecture=Lecture.objects.get(pk=request.GET.get('lecture_id')),
+            slide=Slide.objects.get(pk=request.GET.get('slide_id')),
         )
-        for comment in comments:
-            comment['user'] = UserSerializer(User.objects.get(pk=comment.user))
         serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data, users)
+        for comment in serializer.data:
+            comment['user'] = UserSerializer(User.objects.get(pk=comment['user'])).data
+        return Response(serializer.data)
 
     def patch(self, request):
         validate_comment(request.data)
         try:
-            comment = Comment.objects.get(pk=request.data.get('comment'))
+            comment = Comment.objects.get(pk=request.data.get('comment_id'))
         except Comment.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         comment.text = request.data.get('text')
         comment.save()
         serializer = CommentSerializer(comment)
+        serializer.data[0]['user'] = UserSerializer(User.objects.get(pk=serializer.data[0]['user'])).data
         return Response(serializer.data)
 
     def delete(self, request):
@@ -79,8 +83,9 @@ class APIProgress(APIView):
     def post(self, request):
         new_progress = Progress.objects.create(
             user=request.user,
-            lecture=request.data.get('lecture'),
-            slide=request.data.get('slide'),
+            course=Course.objects.get(pk=request.GET.get('course_id')),
+            lecture=Lecture.objects.get(pk=request.GET.get('lecture_id')),
+            slide=Slide.objects.get(pk=request.GET.get('slide_id')),
         )
         serializer = ProgressSerializer(new_progress)
         return Response(serializer.data)
