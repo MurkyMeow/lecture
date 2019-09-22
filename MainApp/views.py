@@ -5,6 +5,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
+from AuthApp.serializers import UserSerializer
 from .models import *
 from .serializers import *
 
@@ -37,8 +38,8 @@ class APIComments(APIView):
         validate_comment(request.data)
         new_comment = Comment.objects.create(
             user=request.user,
-            lecture_id=request.data.get('lecture_id'),
-            slide_id=request.data.get('slide_id'),
+            lecture=request.data.get('lecture'),
+            slide=request.data.get('slide'),
             text=request.data.get('text'),
         )
         serializer = CommentSerializer(new_comment)
@@ -46,16 +47,18 @@ class APIComments(APIView):
 
     def get(self, request):
         comments = Comment.objects.filter(
-            lecture_id=request.GET.get('lecture_id'),
-            slide_id=request.GET.get('slide_id'),
+            lecture=request.GET.get('lecture'),
+            slide=request.GET.get('slide'),
         )
+        for comment in comments:
+            comment['user'] = UserSerializer(User.objects.get(pk=comment.user))
         serializer = CommentSerializer(comments, many=True)
-        return Response(serializer.data)
+        return Response(serializer.data, users)
 
     def patch(self, request):
         validate_comment(request.data)
         try:
-            comment = Comment.objects.get(pk=request.data.get('comment_id'))
+            comment = Comment.objects.get(pk=request.data.get('comment'))
         except Comment.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         comment.text = request.data.get('text')
@@ -76,8 +79,8 @@ class APIProgress(APIView):
     def post(self, request):
         new_progress = Progress.objects.create(
             user=request.user,
-            lecture_id=request.data.get('lecture_id'),
-            slide_id=request.data.get('slide_id'),
+            lecture=request.data.get('lecture'),
+            slide=request.data.get('slide'),
         )
         serializer = ProgressSerializer(new_progress)
         return Response(serializer.data)
