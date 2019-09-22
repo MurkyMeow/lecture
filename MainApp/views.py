@@ -53,6 +53,8 @@ class APIComments(APIView):
             lecture=Lecture.objects.get(pk=request.GET.get('lecture_id')),
             slide=Slide.objects.get(pk=request.GET.get('slide_id')),
         )
+        for comment in comments:
+            comment['user'] = UserSerializer(User.objects.get(pk=comment.user))
         serializer = CommentSerializer(comments, many=True)
         for comment in serializer.data:
             comment['user'] = UserSerializer(User.objects.get(pk=comment['user'])).data
@@ -61,7 +63,7 @@ class APIComments(APIView):
     def patch(self, request):
         validate_comment(request.data)
         try:
-            comment = Comment.objects.get(pk=request.data.get('comment_id'))
+            comment = Comment.objects.get(pk=request.data.get('comment'))
         except Comment.DoesNotExist:
             return Response(status=status.HTTP_404_NOT_FOUND)
         comment.text = request.data.get('text')
