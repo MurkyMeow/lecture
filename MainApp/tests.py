@@ -16,9 +16,11 @@ class CommentsTests(APITestCase):
         )
         course = Course.objects.create(name='course_1')
         lecture = Lecture.objects.create(
-            course=course, title='lec_1', subtitle='lec_1_subtitle', background='#fff')
+            course=course, title='lec_1', subtitle='lec_1_subtitle', background='#fff'
+        )
         slide = Slide.objects.create(
-            lecture=self.lecture, title='slide_1_title', content='slide_1_content'),
+            lecture=lecture, title='slide_1_title', content='slide_1_content'
+        )
         self.comments = [
             Comment.objects.create(user=u, lecture=lecture, slide=slide, text='foo'),
             Comment.objects.create(user=u, lecture=lecture, slide=slide, text='bar'),
@@ -35,7 +37,7 @@ class CommentsTests(APITestCase):
         self.assertEqual(len(res.data), len(self.comments))
 
     def test_create_comment(self):
-        comment = { 'lecture_id': 2, 'slide_id': 1, 'text': 'qwerqwer' }
+        comment = { 'lecture_id': 1, 'slide_id': 1, 'text': 'qwerqwer' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
