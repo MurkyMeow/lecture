@@ -15,30 +15,20 @@ class CommentsTests(APITestCase):
             username=user['name'], email=user['email'], password=user['password']
         )
         course = Course.objects.create(name='course_1')
-        self.lectures = [
-            Lecture.objects.create(
-                course=course, title='lec_1', subtitle='lec_1_subtitle', background='#fff'),
-            Lecture.objects.create(
-                course=course, title='lec_2', subtitle='lec_2_subtitle', background='#fff'),
-        ]
-        self.slides = [
-            Slide.objects.create(
-                lecture=self.lectures[0], title='slide_1_title', content='slide_1_content'),
-            Slide.objects.create(
-                lecture=self.lectures[0], title='slide_2_title', content='slide_1_content'),
-        ]
+        lecture = Lecture.objects.create(
+            course=course, title='lec_1', subtitle='lec_1_subtitle', background='#fff')
+        slide = Slide.objects.create(
+            lecture=self.lecture, title='slide_1_title', content='slide_1_content'),
         self.comments = [
-            Comment.objects.create(
-                user=u, lecture=self.lectures[0], slide=self.slides[0], text='foo'),
-            Comment.objects.create(
-                user=u, lecture=self.lectures[0], slide=self.slides[0], text='bar'),
+            Comment.objects.create(user=u, lecture=lecture, slide=slide, text='foo'),
+            Comment.objects.create(user=u, lecture=lecture, slide=slide, text='bar'),
         ]
         self.client.force_authenticate(u)
 
     def test_get_comments(self):
         params = {
-            'lecture_id': self.lectures[0].id,
-            'slide_id': self.slides[0].id,
+            'lecture_id': 1,
+            'slide_id': 1,
         }
         res = self.client.get('/course/comments/', params)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
