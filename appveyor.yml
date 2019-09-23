@@ -9,5 +9,5 @@ platform: x64
 install:
   - cmd: "%PIP% install -r requirements.txt"
 
-test_script:
+build_script:
   - cmd: "%PYTHON%\\python manage.py runserver"
