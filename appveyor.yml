@@ -1,0 +1,13 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_VERSION: "3.7.4"
+      PIP: "C:\\Python36-x64\\Scripts\\pip"
+
+platform: x64
+
+install:
+  - cmd: "%PIP% install -r requirements.txt"
+
+test_script:
+  - cmd: "%PYTHON%\\python manage.py runserver"
