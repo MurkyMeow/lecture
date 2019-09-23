@@ -11,4 +11,4 @@ install:
 
 build_script:
   - cmd: echo a_super_secret_key > secretkey.txt
-  - cmd: "%PYTHON%\\python manage.py runserver"
+  - cmd: "%PYTHON%\\python manage.py test"
