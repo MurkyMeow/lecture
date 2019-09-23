@@ -1,6 +1,6 @@
 from rest_framework.test import APITestCase
 from rest_framework import status
-from .models import Comment
+from .models import Comment, Course, Lecture, Slide
 from django.contrib.auth.models import User
 
 user = {
@@ -14,14 +14,32 @@ class CommentsTests(APITestCase):
         u = User.objects.create_user(
             username=user['name'], email=user['email'], password=user['password']
         )
+        course = Course.objects.create(name='course_1')
+        self.lectures = [
+            Lecture.objects.create(
+                course=course, title='lec_1', subtitle='lec_1_subtitle', background='#fff'),
+            Lecture.objects.create(
+                course=course, title='lec_2', subtitle='lec_2_subtitle', background='#fff'),
+        ]
+        self.slides = [
+            Slide.objects.create(
+                lecture=self.lectures[0], title='slide_1_title', content='slide_1_content'),
+            Slide.objects.create(
+                lecture=self.lectures[0], title='slide_2_title', content='slide_1_content'),
+        ]
         self.comments = [
-            Comment.objects.create(user=u, lecture_id=1, slide_id=1, text='foo'),
-            Comment.objects.create(user=u, lecture_id=1, slide_id=1, text='bar'),
+            Comment.objects.create(
+                user=u, lecture=self.lectures[0], slide=self.slides[0], text='foo'),
+            Comment.objects.create(
+                user=u, lecture=self.lectures[0], slide=self.slides[0], text='bar'),
         ]
         self.client.force_authenticate(u)
 
     def test_get_comments(self):
-        params = { 'lecture_id': 1, 'slide_id': 1 }
+        params = {
+            'lecture_id': self.lectures[0].id,
+            'slide_id': self.slides[0].id,
+        }
         res = self.client.get('/course/comments/', params)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), len(self.comments))
@@ -31,8 +49,8 @@ class CommentsTests(APITestCase):
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
-        self.assertEqual(res.data['slide_id'], comment['slide_id'])
-        self.assertEqual(res.data['lecture_id'], comment['lecture_id'])
+        self.assertEqual(res.data['slide'], str(comment['slide_id']))
+        self.assertEqual(res.data['lecture'], str(comment['lecture_id']))
 
     def test_patch_comment(self):
         comment = { 'text': 'qwerqwer', 'comment_id': 1 }

@@ -1,0 +1,14 @@
+environment:
+  matrix:
+    - PYTHON: "C:\\Python36-x64"
+      PYTHON_VERSION: "3.7.4"
+      PIP: "C:\\Python36-x64\\Scripts\\pip"
+
+platform: x64
+
+install:
+  - cmd: "%PIP% install -r requirements.txt"
+
+build_script:
+  - cmd: echo a_super_secret_key > secretkey.txt
+  - cmd: "%PYTHON%\\python manage.py test"
