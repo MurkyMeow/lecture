@@ -52,11 +52,9 @@ class CommentsTests(APITestCase):
         self.client.force_authenticate(u)
 
     def test_get_comments(self):
-        params = {
-            'lecture_id': 1,
-            'slide_id': 1,
-        }
-        res = self.client.get('/course/comments/', params)
+        res = self.client.get('/course/comments/', {
+            'lecture_id': 1, 'slide_id': 1,
+        })
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), len(self.comments))
 
@@ -65,22 +63,22 @@ class CommentsTests(APITestCase):
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
-        self.assertEqual(res.data['slide'], str(comment['slide_id']))
-        self.assertEqual(res.data['lecture'], str(comment['lecture_id']))
+        self.assertEqual(res.data['slide'], comment['slide_id'])
+        self.assertEqual(res.data['lecture'], comment['lecture_id'])
 
     def test_patch_comment(self):
-        comment = { 'text': 'qwerqwer', 'comment_id': self.comments[0].id }
+        comment = { 'text': 'qwerqwer', 'comment_id': 1 }
         res = self.client.patch('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
 
     def test_delete_comment(self):
-        comment = { 'comment_id': self.comments[0].id }
+        comment = { 'comment_id': 1 }
         res = self.client.delete('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_create_comment_validation(self):
-        comment = { 'course_id': self.courses[1].id, 'lecture_id': self.lectures[1].id, 'slide_id': self.slides[1].id, 'text': '' }
+        comment = { 'course_id': 1, 'lecture_id': 1, 'slide_id': 1, 'text': '' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 

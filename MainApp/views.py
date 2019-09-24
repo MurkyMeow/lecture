@@ -38,7 +38,6 @@ class APIComments(APIView):
         validate_comment(request.data)
         new_comment = Comment.objects.create(
             user=request.user,
-            course=Course.objects.get(pk=request.data.get('course_id')),
             lecture=Lecture.objects.get(pk=request.data.get('lecture_id')),
             slide=Slide.objects.get(pk=request.data.get('slide_id')),
             text=request.data.get('text'),
@@ -49,7 +48,6 @@ class APIComments(APIView):
 
     def get(self, request):
         comments = Comment.objects.filter(
-            course=Course.objects.get(pk=request.GET.get('course_id')),
             lecture=Lecture.objects.get(pk=request.GET.get('lecture_id')),
             slide=Slide.objects.get(pk=request.GET.get('slide_id')),
         )
