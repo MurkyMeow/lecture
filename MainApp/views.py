@@ -38,13 +38,13 @@ class APIComments(APIView):
         validate_comment(request.data)
         new_comment = Comment.objects.create(
             user=request.user,
-            course=Course.objects.get(pk=request.GET.get('course_id')),
+            course=Course.objects.get(pk=request.data.get('course_id')),
             lecture=Lecture.objects.get(pk=request.data.get('lecture_id')),
             slide=Slide.objects.get(pk=request.data.get('slide_id')),
             text=request.data.get('text'),
         )
         serializer = CommentSerializer(new_comment)
-        serializer.data[0]['user'] = UserSerializer(User.objects.get(pk=serializer.data[0]['user'])).data
+        serializer.data['user'] = UserSerializer(User.objects.get(pk=serializer.data['user'])).data
         return Response(serializer.data)
 
     def get(self, request):
@@ -67,7 +67,7 @@ class APIComments(APIView):
         comment.text = request.data.get('text')
         comment.save()
         serializer = CommentSerializer(comment)
-        serializer.data[0]['user'] = UserSerializer(User.objects.get(pk=serializer.data[0]['user'])).data
+        serializer.data['user'] = UserSerializer(User.objects.get(pk=serializer.data['user'])).data
         return Response(serializer.data)
 
     def delete(self, request):

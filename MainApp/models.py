@@ -7,7 +7,7 @@ class Course(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return self.id
 
 
 class Lecture(models.Model):
@@ -18,7 +18,7 @@ class Lecture(models.Model):
     background = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.title
+        return self.id
 
 
 class Slide(models.Model):
@@ -29,7 +29,7 @@ class Slide(models.Model):
     content = models.TextField()
 
     def __str__(self):
-        return self.title
+        return self.id
 
 
 class Exercise(models.Model):
@@ -42,7 +42,7 @@ class Exercise(models.Model):
         verbose_name_plural = "Exercises"
 
     def __str__(self):
-        return self.task
+        return self.id
 
 
 class Answer(models.Model):
@@ -56,7 +56,7 @@ class Answer(models.Model):
         verbose_name_plural = "Answers"
 
     def __str__(self):
-        return self.option, self.for_exercise
+        return self.id
 
 
 class Comment(models.Model):
@@ -73,7 +73,7 @@ class Comment(models.Model):
         verbose_name_plural = "Comments"
 
     def __str__(self):
-        return self.user, self.text 
+        return self.id
 
 
 class Progress(models.Model):
@@ -88,4 +88,4 @@ class Progress(models.Model):
         verbose_name_plural = "Progress"
 
     def __str__(self):
-        return self.user, self.lecture
+        return self.id
