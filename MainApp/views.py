@@ -43,7 +43,6 @@ class APIComments(APIView):
             text=request.data.get('text'),
         )
         serializer = CommentSerializer(new_comment)
-        serializer.data['user'] = UserSerializer(User.objects.get(pk=serializer.data['user'])).data
         return Response(serializer.data)
 
     def get(self, request):
@@ -52,8 +51,6 @@ class APIComments(APIView):
             slide=Slide.objects.get(pk=request.GET.get('slide_id')),
         )
         serializer = CommentSerializer(comments, many=True)
-        for comment in serializer.data:
-            comment['user'] = UserSerializer(User.objects.get(pk=comment['user'])).data
         return Response(serializer.data)
 
     def patch(self, request):
@@ -65,7 +62,6 @@ class APIComments(APIView):
         comment.text = request.data.get('text')
         comment.save()
         serializer = CommentSerializer(comment)
-        serializer.data['user'] = UserSerializer(User.objects.get(pk=serializer.data['user'])).data
         return Response(serializer.data)
 
     def delete(self, request):
