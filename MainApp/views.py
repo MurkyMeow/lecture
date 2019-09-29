@@ -24,14 +24,12 @@ def GetAllCourses(request):
 
 @api_view(['GET'])
 def GetLectures(request):
-    course = Course.objects.get(pk=request.GET.get('course_id'))
-    serializer = LectureSerializer(Lecture.objects.filter(course=course) ,many=True)
+    serializer = LectureSerializer(Lecture.objects.filter(course=request.GET.get('course_id')), many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
 def GetSlides(request):
-    lecture = Lecture.objects.get(pk=request.GET.get('lecture_id'))
-    serializer = SlideSerializer(Slide.objects.filter(lecture=lecture) ,many=True)
+    serializer = SlideSerializer(Slide.objects.filter(lecture=request.GET.get('lecture_id')), many=True)
     return Response(serializer.data)
 
 class APIComments(APIView):
