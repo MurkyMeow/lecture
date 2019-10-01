@@ -5,4 +5,7 @@ urlpatterns = [
     path('<str:course>/<int:lecture>/', LectureView),
     path('comments/', APIComments.as_view()),
     path('progress/', APIProgress.as_view()),
+    path('courses/', GetAllCourses),
+    path('lectures/', GetLectures),
+    path('slides/', GetSlides),
 ]

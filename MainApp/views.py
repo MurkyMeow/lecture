@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.models import User
 from rest_framework import status
 from rest_framework.views import APIView
+from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
 from .models import *
@@ -15,6 +16,21 @@ def LectureView(request, course, lecture):
 
 def validate_comment(data):
     if not data.get('text'): raise ValidationError('`text` cant be empty')
+
+@api_view(['GET'])
+def GetAllCourses(request):
+    serializer = CourseSerializer(Course.objects.all(), many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def GetLectures(request):
+    serializer = LectureSerializer(Lecture.objects.filter(course=request.GET.get('course_id')), many=True)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+def GetSlides(request):
+    serializer = SlideSerializer(Slide.objects.filter(lecture=request.GET.get('lecture_id')), many=True)
+    return Response(serializer.data)
 
 class APIComments(APIView):
     def post(self, request):
