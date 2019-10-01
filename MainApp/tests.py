@@ -9,6 +9,30 @@ user = {
     'password': 'testtest123'
 }
 
+class GetControllersTest(APITestCase):
+    def setUp(self):
+        course = Course.objects.create(name='course_1')
+        lecture = Lecture.objects.create(
+            course=course, title='lec_1', subtitle='lec_1_subtitle', background='#fff'
+        )
+        slide = Slide.objects.create(
+            lecture=lecture, title='slide_1_title', content='slide_1_content'
+        )
+
+        def test_get_all_courses(self):
+            res = self.client.get('/course/courses/')
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        def test_get_lectures(self):
+            params = { 'course_id': course.id }
+            res = self.client.get('/course/lectures/', params)
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+
+        def test_get_slides(self):
+            params = { 'lecture_id': lecture.id }
+            res = self.client.get('/course/slides/', params)
+            self.assertEqual(res.status_code, status.HTTP_200_OK)
+            
 class CommentsTests(APITestCase):
     def setUp(self):
         u = User.objects.create_user(
