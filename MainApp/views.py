@@ -5,7 +5,6 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.exceptions import ValidationError
-from AuthApp.serializers import UserSerializer
 from .models import *
 from .serializers import *
 
@@ -38,8 +37,8 @@ class APIComments(APIView):
         validate_comment(request.data)
         new_comment = Comment.objects.create(
             user=request.user,
-            lecture=Lecture.objects.get(pk=request.data.get('lecture_id')),
-            slide=Slide.objects.get(pk=request.data.get('slide_id')),
+            lecture_id=request.data.get('lecture_id'),
+            slide_id=request.data.get('slide_id'),
             text=request.data.get('text'),
         )
         serializer = CommentSerializer(new_comment)
@@ -47,8 +46,8 @@ class APIComments(APIView):
 
     def get(self, request):
         comments = Comment.objects.filter(
-            lecture=Lecture.objects.get(pk=request.GET.get('lecture_id')),
-            slide=Slide.objects.get(pk=request.GET.get('slide_id')),
+            lecture_id=request.GET.get('lecture_id'),
+            slide_id=request.GET.get('slide_id'),
         )
         serializer = CommentSerializer(comments, many=True)
         return Response(serializer.data)
@@ -77,9 +76,8 @@ class APIProgress(APIView):
     def post(self, request):
         new_progress = Progress.objects.create(
             user=request.user,
-            course=Course.objects.get(pk=request.GET.get('course_id')),
-            lecture=Lecture.objects.get(pk=request.GET.get('lecture_id')),
-            slide=Slide.objects.get(pk=request.GET.get('slide_id')),
+            lecture_id=request.GET.get('lecture_id'),
+            slide_id=request.GET.get('slide_id'),
         )
         serializer = ProgressSerializer(new_progress)
         return Response(serializer.data)

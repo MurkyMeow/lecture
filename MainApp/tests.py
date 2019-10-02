@@ -72,8 +72,8 @@ class CommentsTests(APITestCase):
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(res.data['text'], comment['text'])
-        self.assertEqual(res.data['slide'], comment['slide_id'])
-        self.assertEqual(res.data['lecture'], comment['lecture_id'])
+        self.assertEqual(res.data['slide'], str(comment['slide_id']))
+        self.assertEqual(res.data['lecture'], str(comment['lecture_id']))
 
     def test_patch_comment(self):
         comment = { 'text': 'qwerqwer', 'comment_id': 1 }
@@ -87,7 +87,7 @@ class CommentsTests(APITestCase):
         self.assertEqual(res.status_code, status.HTTP_204_NO_CONTENT)
 
     def test_create_comment_validation(self):
-        comment = { 'course_id': 1, 'lecture_id': 1, 'slide_id': 1, 'text': '' }
+        comment = { 'lecture_id': 1, 'slide_id': 1, 'text': '' }
         res = self.client.post('/course/comments/', comment)
         self.assertEqual(res.status_code, status.HTTP_400_BAD_REQUEST)
 
