@@ -1,23 +1,27 @@
-import { State } from 'marycat'
+import { State, PipeFn } from 'marycat'
 import { pageIndex } from './pages/page-index'
 import { pageAbout } from './pages/page-about'
 
-const routes = [
+type Route = {
+  regex: RegExp
+  params?: string[]
+  component: () => PipeFn
+}
+
+const routes: Route[] = [
   {
     regex: /^$/,
-    component: pageIndex,
+    component: pageIndex.new,
   }, {
     regex: /^about$/,
-    component: pageAbout,
+    component: pageAbout.new,
   }
 ]
 
-let query = {}
+let query: { [x: string]: string } = {}
+export const get_query = () => query
+export const element = new State<PipeFn | null>(null)
 
-export const element = new State()
-export function get_query() {
-  return query
-}
 export function update() {
   const path = location.hash.replace(/^#\/|\/$/g, '')
   const route = routes.find(x => x.regex.test(path))
@@ -32,4 +36,3 @@ export function update() {
   }
   element.v = route.component()
 }
-window.onhashchange = update
