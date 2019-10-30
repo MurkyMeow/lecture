@@ -2,10 +2,10 @@ import { State, PipeFn } from 'marycat'
 import { pageIndex } from './pages/page-index'
 import { pageAbout } from './pages/page-about'
 
-type Route = {
+interface Route {
   regex: RegExp
   params?: string[]
-  component: () => PipeFn
+  component: () => PipeFn<Element>
 }
 
 const routes: Route[] = [
@@ -20,7 +20,7 @@ const routes: Route[] = [
 
 let query: { [x: string]: string } = {}
 export const get_query = () => query
-export const element = new State<PipeFn | null>(null)
+export const element = new State<PipeFn<Element> | null>(null)
 
 export function update() {
   const path = location.hash.replace(/^#\/|\/$/g, '')

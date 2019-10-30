@@ -2,7 +2,7 @@ import { customElement, PipeFn, defAttr, styleEl, repeat, on, attr, dispatch } f
 import { span } from '../bindings'
 import css from './progress.css'
 
-function viewProgress(h: PipeFn, {
+function viewProgress(h: PipeFn<ShadowRoot>, {
   max = defAttr(4),
   active = defAttr(-1),
   done = defAttr<number[]>([]),

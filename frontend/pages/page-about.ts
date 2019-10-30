@@ -1,7 +1,7 @@
 import { customElement, PipeFn } from 'marycat'
 import { div } from '../bindings'
 
-function viewAbout(h: PipeFn) {
+function viewAbout(h: PipeFn<ShadowRoot>) {
   return h
   (div('About page!'))
 }

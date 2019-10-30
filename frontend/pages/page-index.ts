@@ -6,13 +6,13 @@ import { Button } from '../components/button';
 import { get } from '../api'
 import css from './page-index.css'
 
-type Lecture = {
+interface Lecture {
   id: number
   title: string
   subtitle: string
   background: string
 }
-type Course = {
+interface Course {
   id: number
   name: string
 }
@@ -24,13 +24,13 @@ const view_lecture = (item: State<Lecture>) =>
       (div('.lecture-title')(item._.title))
       (pre('.lecture-summary')(item._.subtitle))
     )
-    (Progress.new())
+    (Progress.new()
       (Progress.prop('max', 5))
       (Progress.prop('done', [0, 2])
-    )
+    ))
   )
 
-function viewPageIndex(h: PipeFn) {
+function viewPageIndex(h: PipeFn<ShadowRoot>) {
   const lecture = new State<Lecture | null>(null)
   const courses = new State<Course[]>([])
   get<Course[]>('/course/courses')

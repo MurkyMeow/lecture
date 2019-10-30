@@ -1,4 +1,4 @@
-import { fragment, on, attr, mount, styleEl } from 'marycat'
+import { frag, on, attr, mount, styleEl } from 'marycat'
 import { header, div, main } from './bindings'
 import { store, User } from './store'
 import { FormAuth } from './components/form-auth'
@@ -18,19 +18,19 @@ const logout = () =>
   get('/auth/logout/')
     .then(() => store.user.v = null)
 
-const app = fragment()
+const app = frag()
   (styleEl()(css))
   (header('.header')
     (div('.header-logo')('🌌 Lecture'))
     (div('.header-auth')
-      (store.user.map(v => v && (() => [
+      (store.user.map(v => v ? [
         Button.new()(v.username),
         Button.new('Выйти')(on('click', logout)),
-      ]) || (() =>
+      ] :
         Button.new('Войти'))
-      ))
+      )
     )
-    (store.user.not().and(() =>
+    (store.user.map(v => !v &&
       FormAuth.new()(attr('tabindex', 0))
     ))
   )

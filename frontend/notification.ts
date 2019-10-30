@@ -9,6 +9,6 @@ export function show(text: string, type: 'success' | 'error', timeout = 2000) {
   if (!box) {
     return console.trace('Cant find a notification-box')
   }
-  const el = mount(box, vnode)
+  const [el] = mount(box, vnode)
   setTimeout(() => box.removeChild(el), timeout)
 }

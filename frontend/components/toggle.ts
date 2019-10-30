@@ -2,19 +2,19 @@ import { State, customElement, PipeFn, defAttr, styleEl, on, dispatch, repeat, a
 import { span } from '../bindings'
 import css from './toggle.css'
 
-function viewToggle(h: PipeFn, {
+function viewToggle(h: PipeFn<ShadowRoot>, {
   tabs = defAttr<string[]>([]),
+  current = defAttr(0),
 }) {
-  const index = new State(0)
   return h
   (on('click', () => {
-    index.v = (index.v + 1) % tabs.v.length
-    h(dispatch('change', tabs.v[index.v]))
+    current.v = (current.v + 1) % tabs.v.length
+    h(dispatch('change', tabs.v[current.v]))
   }))
   (styleEl()(css))
   (repeat(tabs, x => x, (item, i) =>
     (span(item.v)
-      (attr('class', index.eq(i).and('active')))
+      (attr('class', current.eq(i).and('active')))
     )
   ))
 }

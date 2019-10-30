@@ -15,7 +15,7 @@ const comments = new State([
   },
 ])
 
-function viewLesson(h: PipeFn, {
+function viewLesson(h: PipeFn<ShadowRoot>, {
   slide = defAttr(0),
   data = defAttr({ name: '', index: 0 })
 }) {
