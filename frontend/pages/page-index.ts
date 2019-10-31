@@ -1,8 +1,7 @@
 import { State, customElement, PipeFn, styleEl, repeat, style } from 'marycat'
-import { div, h1, article, section, pre } from '../bindings';
-import { Lesson } from '../components/lesson';
-import { Progress } from '../components/progress';
-import { Button } from '../components/button';
+import { div, h1, article, section, pre } from '../bindings'
+import { Progress } from '../components/progress'
+import { Button } from '../components/button'
 import { get } from '../api'
 import css from './page-index.css'
 
@@ -31,16 +30,12 @@ const view_lecture = (item: State<Lecture>) =>
   )
 
 function viewPageIndex(h: PipeFn<ShadowRoot>) {
-  const lecture = new State<Lecture | null>(null)
   const courses = new State<Course[]>([])
   get<Course[]>('/course/courses')
     .then(data => courses.v = data)
   return h
   (styleEl()(css))
   (div('.content')
-    // (lecture.and(() =>
-    //   Lesson().prop('data', lecture).on('hide', () => lecture.v = null)
-    // ))
     (repeat(courses, x => x.id.toString(), course =>
       (article()
         (h1()(course._.name))
