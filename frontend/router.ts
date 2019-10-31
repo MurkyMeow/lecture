@@ -4,22 +4,19 @@ import { pageAbout } from './pages/page-about'
 
 interface Route {
   regex: RegExp
-  params?: string[]
-  component: () => PipeFn<Element>
+  component: (params: string[]) => PipeFn<Element>
 }
 
 const routes: Route[] = [
   {
     regex: /^$/,
-    component: pageIndex.new,
+    component: () => pageIndex.new(),
   }, {
     regex: /^about$/,
-    component: pageAbout.new,
+    component: () => pageAbout.new(),
   }
 ]
 
-let query: { [x: string]: string } = {}
-export const get_query = () => query
 export const element = new State<PipeFn<Element> | null>(null)
 
 export function update() {
@@ -29,10 +26,8 @@ export function update() {
     console.warn(`Unknown path: ${path}`)
     return
   }
-  if (route.params) {
-    query = {}
-    const [_, ...args] = path.match(route.regex) || []
-    route.params.forEach((param, i) => query[param] = args[i])
+  const [match, ...args] = path.match(route.regex) || []
+  if (match) {
+    element.v = route.component(args)
   }
-  element.v = route.component()
 }
