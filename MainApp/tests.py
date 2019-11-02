@@ -8,21 +8,26 @@ from django.contrib.auth.models import User
 
 
 class SyncCoursesTest(TestCase):
-    def test_command_output(self):
-        MOCK_DIR = 'courses_mock'
-        names = list(
-            map(lambda x: x.strip('.json'), os.listdir(MOCK_DIR))
-        )
-        call_command('sync_courses', MOCK_DIR)
+    MOCK_DIR = 'courses_mock'
+    names = list(
+        map(lambda x: x.strip('.json'), os.listdir(MOCK_DIR))
+    )
+
+    def test_fill(self):
+        call_command('sync_courses', self.MOCK_DIR)
         objects = Course.objects.all()
-        self.assertEqual(len(objects), len(names),
+        self.assertEqual(len(objects), len(self.names),
             'The amount of produced objects does not match the amount of files')
         for obj in objects:
-            self.assertTrue(obj.name in names, f'Produced a course with unknown name "{obj.name}"')
-        call_command('sync_courses', MOCK_DIR)
+            self.assertTrue(obj.name in self.names, f'Produced a course with unknown name "{obj.name}"')
+
+    def test_update(self):
+        call_command('sync_courses', self.MOCK_DIR)
+        objects = Course.objects.all()
+        len(objects) # destroy quantum superposition
+        call_command('sync_courses', self.MOCK_DIR)
         next_objects = Course.objects.all()
-        self.assertEqual(len(objects), len(next_objects),
-            'The second run produced more or less objects than the previous one')
+        self.assertEqual(len(objects), len(next_objects))
         for (obj, n_obj) in zip(objects, next_objects):
             self.assertEqual(obj.name, n_obj.name)
             self.assertEqual(obj.id, n_obj.id)
