@@ -28,13 +28,10 @@ export const element = new State<PipeFn<Element> | null>(null)
 
 export function update() {
   const path = location.hash.replace(/^#\/|\/$/g, '')
-  const route = routes.find(x => x.regex.test(path))
-  if (!route) {
-    console.warn(`Unknown path: ${path}`)
-    return
-  }
-  const [match, ...args] = path.match(route.regex) || []
-  if (match) {
-    element.v = route.component(args)
+  for (const route of routes) {
+    const [match, ...args] = path.match(route.regex) || []
+    if (match !== undefined) {
+      return element.v = route.component(args)
+    }
   }
 }
