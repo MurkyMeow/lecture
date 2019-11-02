@@ -3,14 +3,13 @@
   color: #fff;
   display: inline-block;
   text-align: center;
-  padding: .25em .625em;
   border-radius: .32em;
   background: linear-gradient(to right, #6d67ff, #d644ff);
 }
 button {
   font: inherit;
   color: inherit;
-  padding: 0;
+  padding: .25em .625em;
   border: none;
   background: none;
   box-sizing: border-box;
