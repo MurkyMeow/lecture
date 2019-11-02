@@ -37,7 +37,7 @@ function viewFormAuth(h: PipeFn<ShadowRoot>) {
     (div('.error')(errors._.main.or('')))
     (Toggle.new()
       (Toggle.prop('tabs', ['🔑', '👽']))
-      (on('change', (e: Event) => option.v = (<CustomEvent>e).detail))
+      (Toggle.on('change', e => option.v = <FormMode>e.detail))
     )
     (input('@email')
       (attr('type', 'email'))

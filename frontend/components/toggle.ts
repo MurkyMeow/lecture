@@ -1,15 +1,18 @@
-import { State, customElement, PipeFn, defAttr, styleEl, on, dispatch, repeat, attr } from 'marycat'
+import { customElement, PipeFn, defAttr, styleEl, on, repeat, attr, TypedDispatch } from 'marycat'
 import { span } from '../bindings'
 import css from './toggle.css'
+
+type ToggleDispatch =
+  TypedDispatch<{ change: string }>
 
 function viewToggle(h: PipeFn<ShadowRoot>, {
   tabs = defAttr<string[]>([]),
   current = defAttr(0),
-}) {
+}, t_dispatch: ToggleDispatch) {
   return h
   (on('click', () => {
     current.v = (current.v + 1) % tabs.v.length
-    h(dispatch('change', tabs.v[current.v]))
+    h(t_dispatch('change', tabs.v[current.v]))
   }))
   (styleEl()(css))
   (repeat(tabs, x => x, (item, i) =>

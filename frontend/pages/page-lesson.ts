@@ -35,7 +35,7 @@ function viewLesson(h: PipeFn<ShadowRoot>, {
   (Progress.new()
     (Progress.prop('max', slides))
     (Progress.prop('active', slideId))
-    (on('change', (e: Event) => slideId.v = (<CustomEvent>e).detail))
+    (Progress.on('change', e => slideId.v = e.detail))
   )
   (iframe()
     (on('load', onload))
