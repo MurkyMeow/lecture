@@ -1,7 +1,32 @@
+import os
 from rest_framework.test import APITestCase
 from rest_framework import status
 from .models import Comment, Course, Lecture, Slide
+from django.test import TestCase
+from django.core.management import call_command
 from django.contrib.auth.models import User
+
+
+class SyncCoursesTest(TestCase):
+    def test_command_output(self):
+        MOCK_DIR = 'courses_mock'
+        names = list(
+            map(lambda x: x.strip('.json'), os.listdir(MOCK_DIR))
+        )
+        call_command('sync_courses', MOCK_DIR)
+        objects = Course.objects.all()
+        self.assertEqual(len(objects), len(names),
+            'The amount of produced objects does not match the amount of files')
+        for obj in objects:
+            self.assertTrue(obj.name in names, f'Produced a course with unknown name "{obj.name}"')
+        call_command('sync_courses', MOCK_DIR)
+        next_objects = Course.objects.all()
+        self.assertEqual(len(objects), len(next_objects),
+            'The second run produced more or less objects than the previous one')
+        for (obj, n_obj) in zip(objects, next_objects):
+            self.assertEqual(obj.name, n_obj.name)
+            self.assertEqual(obj.id, n_obj.id)
+
 
 user = {
     'name': 'Test',
