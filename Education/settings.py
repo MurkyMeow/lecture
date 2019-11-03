@@ -40,8 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'AuthApp.apps.AuthappConfig',
     'MainApp.apps.MainappConfig',
-    'rest_framework',
-    'drf_yasg',
+    'graphene_django',
 ]
 
 REST_FRAMEWORK = {
