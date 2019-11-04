@@ -27,6 +27,10 @@ class SigninUser(graphene.Mutation):
       return SigninUser(user=user)
     return None
 
+class SignupConflict(graphene.ObjectType):
+  name = graphene.Boolean()
+  email = graphene.Boolean()
+
 class SignupUser(graphene.Mutation):
   class Arguments:
     name = graphene.String(required=True)
@@ -34,12 +38,19 @@ class SignupUser(graphene.Mutation):
     password = graphene.String(required=True)
 
   user = graphene.Field(UserType)
+  conflict = graphene.Field(SignupConflict)
 
   def mutate(self, info, name, email, password):
     try:
       validate_password(password)
     except ValidationError:
       return None
+    conflict = SignupConflict(
+      name=User.objects.filter(username=name).exists(),
+      email=User.objects.filter(email=email).exists(),
+    )
+    if conflict.email or conflict.name:
+      return SignupUser(conflict=conflict)
     user = User.objects.create_user(email=email, password=password, username=name)
     login(info.context, user)
     return SignupUser(user=user)
