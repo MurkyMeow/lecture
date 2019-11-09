@@ -1,52 +1,94 @@
-from rest_framework.test import APITestCase
-from rest_framework import status
+import json
+from graphene_django.utils.testing import GraphQLTestCase
 from django.contrib.auth.models import User
-from .serializers import UserSerializer
+from Education.schema import schema
 
 user = {
-    'name': 'Test',
-    'email': 'test@test.com',
-    'password': 'testtest123'
+  'name': 'Test',
+  'email': 'test@test.com',
+  'password': 'testtest123'
 }
 
-class AccountTests(APITestCase):
-    def setUp(self):
-        self.user = User.objects.create_user(
-            username=user['name'], email=user['email'], password=user['password']
-        )
+signup_mutation = '''
+  mutation signup($name: String!, $email: String!, $password: String!) {
+    signup(name: $name, email: $email, password: $password) {
+      user {
+        username
+        email
+      }
+      conflict {
+        name
+        email
+      }
+    }
+  }
+'''
 
-    def test_create_account(self):
-        res = self.client.post('/auth/signup/', {
-            'name': 'RulonOboev',
-            'email': 'fuckyouhoney@gmail.com',
-            'password': 'getoverhere',
-        })
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+schema.execute()
 
-    def test_login(self):
-        res = self.client.post('/auth/signin/', {
-            'email': user['email'],
-            'password': user['password'],
-        })
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+class AuthTest(GraphQLTestCase):
+  GRAPHQL_SCHEMA = schema
 
-    def test_signup_name_conflict(self):
-        name = self.client.post('/auth/signup/', {
-            'name': user['name'], 'email': 'z', 'password': 'z',
-        })
-        self.assertEqual(name.status_code, status.HTTP_409_CONFLICT)
-        self.assertEqual(name.data['name'], True)
+  def setUp(self):
+    self.user = User.objects.create_user(
+      username=user['name'], email=user['email'], password=user['password']
+    )
 
-    def test_signup_email_conflict(self):
-        email = self.client.post('/auth/signup/', {
-            'email': user['email'], 'name': 'z', 'password': 'z',
-        })
-        self.assertEqual(email.status_code, status.HTTP_409_CONFLICT)
-        self.assertEqual(email.data['email'], True)
+  def test_create_account(self):
+    variables = {
+      'name': 'RulonOboev',
+      'email': 'fuckyouhoney@gmail.com',
+      'password': 'getoverhere',
+    }
+    res = self.query(signup_mutation, variables=variables)
+    self.assertResponseNoErrors(res)
+    resUser = json.loads(res.content)['data']['signup']['user']
+    self.assertEqual(resUser['username'], variables['name'])
+    self.assertEqual(resUser['email'], variables['email'])
 
-    def test_user_data(self):
-        self.client.force_authenticate(self.user)
-        expected = UserSerializer(self.user)
-        res = self.client.get('/auth/userdata/')
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
-        self.assertDictEqual(res.data, expected.data)
+  def test_login(self):
+    variables = {
+      'email': user['email'],
+      'password': user['password'],
+    }
+    res = self.query('''
+      mutation signin($email: String!, $password: String!) {
+        signin(email: $email, password: $password) {
+          user { email }
+        }
+      }
+    ''', variables=variables)
+    self.assertResponseNoErrors(res)
+    resUser = json.loads(res.content)['data']['signin']['user']
+    self.assertEqual(resUser['email'], variables['email'])
+
+  def test_signup_name_conflict(self):
+    res = self.query(signup_mutation, variables={
+      'name': user['name'], 'email': 'z', 'password': 'z',
+    })
+    self.assertResponseNoErrors(res)
+    conflict = json.loads(res.content)['data']['signup']['conflict']
+    self.assertTrue(conflict['name'])
+
+  def test_signup_email_conflict(self):
+    res = self.query(signup_mutation, variables={
+      'email': user['email'], 'name': 'z', 'password': 'z',
+    })
+    self.assertResponseNoErrors(res)
+    conflict = json.loads(res.content)['data']['signup']['conflict']
+    self.assertTrue(conflict['email'])
+
+  def test_user_data(self):
+    self._client.force_login(self.user)
+    res = self.query('''
+      query {
+        me {
+          username
+          email
+        }
+      }
+    ''')
+    self.assertResponseNoErrors(res)
+    resUser = json.loads(res.content)['data']['me']
+    self.assertEqual(resUser['username'], self.user.username)
+    self.assertEqual(resUser['email'], self.user.email)
