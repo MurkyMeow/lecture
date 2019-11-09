@@ -1,6 +1,4 @@
-import json
-from graphene_django.utils.testing import GraphQLTestCase
-from Education.schema import schema
+from Education.test_case import LectureGraphQLTestCase
 from .models import Comment, Course, Lecture, Slide
 from django.contrib.auth.models import User
 
@@ -34,9 +32,7 @@ user = {
 #             res = self.client.get('/course/slides/', params)
 #             self.assertEqual(res.status_code, status.HTTP_200_OK)
 
-class CommentsTests(GraphQLTestCase):
-  GRAPHQL_SCHEMA = schema
-
+class CommentsTests(LectureGraphQLTestCase):
   def setUp(self):
     u = User.objects.create_user(
       username=user['name'], email=user['email'], password=user['password']
@@ -52,7 +48,7 @@ class CommentsTests(GraphQLTestCase):
       Comment.objects.create(user=u, lecture=lecture, slide=slide, text='foo'),
       Comment.objects.create(user=u, lecture=lecture, slide=slide, text='bar'),
     ]
-    self._client.force_login(u)
+    self.force_login(u)
 
   def test_get_comments(self):
     variables = { 'lectureId': 1, 'slideId': 1 }
@@ -64,8 +60,8 @@ class CommentsTests(GraphQLTestCase):
       }
     ''', variables=variables)
     self.assertResponseNoErrors(res)
-    data = json.loads(res.content)['data']['comments']
-    self.assertEqual(len(data), len(self.comments))
+    resComments = res['data']['comments']
+    self.assertEqual(len(resComments), len(self.comments))
 
   def test_create_comment(self):
     variables = { 'lectureId': 1, 'slideId': 1, 'text': 'qwerqwer' }
@@ -79,8 +75,8 @@ class CommentsTests(GraphQLTestCase):
       }
     ''', variables=variables)
     self.assertResponseNoErrors(res)
-    data = json.loads(res.content)['data']['createComment']
-    self.assertEqual(data['comment']['text'], variables['text'])
+    resComment = res['data']['createComment']['comment']
+    self.assertEqual(resComment['text'], variables['text'])
 
   # def test_patch_comment(self):
   #   comment = { 'text': 'qwerqwer', 'comment_id': 1 }
