@@ -1,7 +1,5 @@
-import json
-from graphene_django.utils.testing import GraphQLTestCase
 from django.contrib.auth.models import User
-from Education.schema import schema
+from Education.test_case import LectureGraphQLTestCase
 
 user = {
   'name': 'Test',
@@ -24,11 +22,7 @@ signup_mutation = '''
   }
 '''
 
-schema.execute()
-
-class AuthTest(GraphQLTestCase):
-  GRAPHQL_SCHEMA = schema
-
+class AuthTest(LectureGraphQLTestCase):
   def setUp(self):
     self.user = User.objects.create_user(
       username=user['name'], email=user['email'], password=user['password']
@@ -42,7 +36,7 @@ class AuthTest(GraphQLTestCase):
     }
     res = self.query(signup_mutation, variables=variables)
     self.assertResponseNoErrors(res)
-    resUser = json.loads(res.content)['data']['signup']['user']
+    resUser = res['data']['signup']['user']
     self.assertEqual(resUser['username'], variables['name'])
     self.assertEqual(resUser['email'], variables['email'])
 
@@ -59,7 +53,7 @@ class AuthTest(GraphQLTestCase):
       }
     ''', variables=variables)
     self.assertResponseNoErrors(res)
-    resUser = json.loads(res.content)['data']['signin']['user']
+    resUser = res['data']['signin']['user']
     self.assertEqual(resUser['email'], variables['email'])
 
   def test_signup_name_conflict(self):
@@ -67,7 +61,7 @@ class AuthTest(GraphQLTestCase):
       'name': user['name'], 'email': 'z', 'password': 'z',
     })
     self.assertResponseNoErrors(res)
-    conflict = json.loads(res.content)['data']['signup']['conflict']
+    conflict = res['data']['signup']['conflict']
     self.assertTrue(conflict['name'])
 
   def test_signup_email_conflict(self):
@@ -75,11 +69,11 @@ class AuthTest(GraphQLTestCase):
       'email': user['email'], 'name': 'z', 'password': 'z',
     })
     self.assertResponseNoErrors(res)
-    conflict = json.loads(res.content)['data']['signup']['conflict']
+    conflict = res['data']['signup']['conflict']
     self.assertTrue(conflict['email'])
 
   def test_user_data(self):
-    self._client.force_login(self.user)
+    self.force_login(self.user)
     res = self.query('''
       query {
         me {
@@ -89,6 +83,6 @@ class AuthTest(GraphQLTestCase):
       }
     ''')
     self.assertResponseNoErrors(res)
-    resUser = json.loads(res.content)['data']['me']
+    resUser = res['data']['me']
     self.assertEqual(resUser['username'], self.user.username)
     self.assertEqual(resUser['email'], self.user.email)
