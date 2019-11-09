@@ -21,7 +21,7 @@ const logout = () =>
 const app = frag()
   (styleEl()(css))
   (header('.header')
-    (div('.header-logo')('🌌 Lecture'))
+    (div('.header-logo')('Lecture'))
     (div('.header-auth')
       (store.user.map(v => v ? [
         Button.new()(v.username),

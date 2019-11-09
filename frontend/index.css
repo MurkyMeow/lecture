@@ -35,15 +35,12 @@ body {
   align-items: center;
   height: var(--header-height);
   padding: 0 10px;
-  background: #fff;
-  border-bottom: 1px solid #d3d3d3;
   &:not(:focus-within) lecture-form-auth {
     display: none;
   }
 }
 .header-logo {
   font-size: 1.65em;
-  font-style: italic;
 }
 .header-auth {
   font-size: .9em;
@@ -76,7 +73,6 @@ lecture-form-auth {
   from { transform: scale(0); }
 }
 .notification {
-  color: #fff;
   text-align: center;
   max-width: 200px;
   margin: 0 auto 5px;
