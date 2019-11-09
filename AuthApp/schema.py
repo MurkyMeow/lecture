@@ -42,16 +42,16 @@ class SignupUser(graphene.Mutation):
   conflict = graphene.Field(SignupConflict)
 
   def mutate(self, info, name, email, password):
-    try:
-      validate_password(password)
-    except ValidationError:
-      return None
     conflict = SignupConflict(
       name=User.objects.filter(username=name).exists(),
       email=User.objects.filter(email=email).exists(),
     )
     if conflict.email or conflict.name:
       return SignupUser(conflict=conflict)
+    try:
+      validate_password(password)
+    except ValidationError:
+      return None
     user = User.objects.create_user(email=email, password=password, username=name)
     login(info.context, user)
     return SignupUser(user=user)
