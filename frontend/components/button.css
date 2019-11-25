@@ -1,9 +1,7 @@
 :host {
   font-weight: 700;
-}
-:host([color="red"]) > button {
-  background: #f74634;
-  border-bottom: #a12530;
+  color: #fff;
+  &([color="purple"]) > button { background: #8b2588; }
 }
 button {
   cursor: pointer;
@@ -11,11 +9,10 @@ button {
   color: inherit;
   width: 100%;
   height: 100%;
-  padding: .25em .625em;
-  border-radius: .32em;
+  padding: .4em .625em;
+  border-radius: .4em;
   border: none;
   background: #75a51e;
-  border-bottom: 1px solid #3b571e;
   box-sizing: border-box;
   transition: background-color .1s;
   &:active {

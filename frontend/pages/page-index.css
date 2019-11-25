@@ -27,7 +27,7 @@ section {
   justify-content: center;
   flex-direction: column;
   height: 120px;
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
   transform: translateY(5px);
   &:hover {
     filter: brightness(1.1);
