@@ -6,8 +6,8 @@ function viewButton(h: PipeFn<ShadowRoot>, {
   color = defAttr<'green' | 'red'>('green'),
 }) {
   return h
-  (styleEl()(css))
+  (styleEl(css))
   (attr('color', color))
-  (button()(slot()))
+  (button(slot()))
 }
 export const Button = customElement('lecture-button', viewButton)

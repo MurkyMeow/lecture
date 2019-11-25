@@ -14,7 +14,7 @@ function viewToggle(h: PipeFn<ShadowRoot>, {
     current.v = (current.v + 1) % tabs.v.length
     h(t_dispatch('change', tabs.v[current.v]))
   }))
-  (styleEl()(css))
+  (styleEl(css))
   (repeat(tabs, x => x, (item, i) =>
     (span(item.v)
       (attr('class', current.eq(i).and('active')))

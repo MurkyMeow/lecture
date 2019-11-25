@@ -1,4 +1,4 @@
-import { State, customElement, PipeFn, styleEl, on, attr, repeat, defAttr } from 'marycat'
+import { State, customElement, PipeFn, styleEl, on, attr, repeat, defAttr, cx } from 'marycat'
 import { iframe, div, textarea, img } from '../bindings'
 import { Progress } from '../components/progress'
 import { Button } from '../components/button'
@@ -42,17 +42,17 @@ function viewLesson(h: PipeFn<ShadowRoot>, {
     (attr('height', '300px'))
     // (attr('src', slideId.map(v => `/course/${name}/${index + 1}/#${v}`)))
   )
-  (div('.comment-box')
-    (div('.comment-input')
+  (div(cx`comment-box`)
+    (div(cx`comment-input`)
       (textarea()(attr('placeholder', 'Оставить комментарий')))
       (Button.new('📡'))
     )
     (repeat(comments, x => x, x =>
-      (div('.comment')
+      (div(cx`comment`)
         (img()(attr('src', x._.user._.photo)))
         (div()
-          (div('.comment-author')(x._.user._.name))
-          (div('.comment-text')(x._.text))
+          (div(cx`comment-author`)(x._.user._.name))
+          (div(cx`comment-text`)(x._.text))
         )
       )
     ))
