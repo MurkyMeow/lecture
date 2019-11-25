@@ -40,6 +40,14 @@ function viewPageIndex(h: PipeFn<ShadowRoot>) {
         { id: 2, title: 'Лекция 2', subtitle: 'foobar', background: '#47ab5b' },
       ],
     },
+    {
+      id: 2,
+      name: 'Комплексный анализ',
+      lectures: [
+        { id: 3, title: 'Лекция 1', subtitle: 'foobar', background: '#892685' },
+        { id: 4, title: 'Лекция 2', subtitle: 'foobar', background: '#d98213' },
+      ],
+    },
   ])
   // get<Course[]>('/course/courses')
   //   .then(data => courses.v = data)
@@ -52,9 +60,9 @@ function viewPageIndex(h: PipeFn<ShadowRoot>) {
         (section()
           (repeat(course._.lectures, x => x, view_lecture))
         )
+        (Button.new('.expand-btn')('Показать все'))
       )
     ))
-    (Button.new('.link', 'Показать все'))
   )
 }
 export const pageIndex = customElement('lecture-page-index', viewPageIndex)

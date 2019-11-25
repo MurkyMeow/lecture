@@ -12,5 +12,6 @@
 .bar {
   width: calc(var(--done) / var(--max));
   height: 100%;
+  border-radius: 5px;
   background: #eee;
 }
