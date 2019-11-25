@@ -1,24 +1,17 @@
 :host {
-  display: flex;
+  display: block;
   padding: 10px 10px 7px;
   border-radius: 5px;
-  border: 1px solid #d3d3d3;
+  background: #d3d3d3;
 }
-span {
-  cursor: pointer;
-  position: relative;
-  flex: 1;
+.bar-wrapper {
   height: 5px;
   border-radius: 5px;
-  background: #d3d3d3;
-  &[data-done="true"] { background: #808080; }
-  &[data-active="true"] { background: #20a5cb; }
-  &:not(:last-child) {
-    margin-right: 2px;
-  }
-  &::after { /* increase clickable area */
-    content: '';
-    position: absolute;
-    top: -3px; bottom: -3px; left: -3px; right: -3px;
-  }
+  background: #808080;
+}
+.bar {
+  width: calc(var(--done) / var(--max));
+  height: 100%;
+  border-radius: 5px;
+  background: #eee;
 }

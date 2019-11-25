@@ -1,4 +1,4 @@
-import { State, customElement, PipeFn, styleEl, on, attr } from 'marycat'
+import { State, customElement, PipeFn, styleEl, on, attr, cx, name } from 'marycat'
 import { form, div, input, button } from '../bindings'
 import { Toggle } from './toggle'
 import { Button } from './button'
@@ -31,32 +31,32 @@ function viewFormAuth(h: PipeFn<ShadowRoot>) {
     }
   }
   return h
-  (styleEl()(css))
+  (styleEl(css))
   (form()
     (on('submit', submit, { prevent: true }))
-    (div('.error')(errors._.main.or('')))
+    (div(cx`error`)(errors._.main.or('')))
     (Toggle.new()
       (Toggle.prop('tabs', ['🔑', '👽']))
       (Toggle.on('change', e => option.v = <FormMode>e.detail))
     )
-    (input('@email')
+    (input(name`email`)
       (attr('type', 'email'))
       (attr('placeholder', 'Email'))
       (attr('required', true))
       ((el: HTMLInputElement) => errors.sub(v => el.setCustomValidity(v.email)))
     )
-    (input('@password')
+    (input(name`passwor`)
       (attr('type', 'password'))
       (attr('placeholder', 'Пароль'))
       (attr('required', true))
     )
     (option.map(v => v === '👽' &&
-      (input('@password_again')
+      (input(name`password_again`)
         (attr('type', 'password'))
         (attr('placeholder', 'Повторите пароль'))
         (attr('required', true))
       )
-      (input('@name')
+      (input(name`name`)
         (attr('placeholder', 'Никнейм'))
         (attr('required', true))
         ((el: HTMLInputElement) => errors.sub(v => el.setCustomValidity(v.name)))

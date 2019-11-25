@@ -1,17 +1,21 @@
 :host {
   font-weight: 700;
   color: #fff;
-  display: inline-block;
-  text-align: center;
-  border-radius: .32em;
-  background: linear-gradient(to right, #6d67ff, #d644ff);
+  &([color="purple"]) > button { background: #8b2588; }
 }
 button {
+  cursor: pointer;
   font: inherit;
   color: inherit;
-  padding: .25em .625em;
+  width: 100%;
+  height: 100%;
+  padding: .4em .625em;
+  border-radius: .4em;
   border: none;
-  background: none;
+  background: #75a51e;
   box-sizing: border-box;
   transition: background-color .1s;
+  &:active {
+    transform: translateY(2px);
+  }
 }

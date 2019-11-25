@@ -9,12 +9,15 @@
 }
 h1 {
   font-size: 1.4em;
-  margin: 50px 0 10px;
+  text-decoration: underline;
+}
+article {
+  margin-bottom: 80px;
 }
 section {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  grid-gap: 20px;
+  gap: 20px;
 }
 .lecture {
   cursor: pointer;
@@ -27,10 +30,10 @@ section {
   justify-content: center;
   flex-direction: column;
   height: 120px;
-  border-radius: 5px;
+  border-radius: 5px 5px 0 0;
   transform: translateY(5px);
   &:hover {
-    filter: brightness(1.1);
+    filter: brightness(1.03);
   }
 }
 .lecture-title {
@@ -45,7 +48,7 @@ section {
   margin: 0;
   &:empty { height: 0; }
 }
-.link {
+.expand-btn {
   font-size: .85em;
   display: block;
   width: 150px;
