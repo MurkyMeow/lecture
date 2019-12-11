@@ -4,7 +4,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.hashers import check_password
 from django.contrib.auth.password_validation import validate_password
 from graphene_django import DjangoObjectType
-from MainApp.models import User
+from django.contrib.auth.models import User
 
 class UserType(DjangoObjectType):
   class Meta:
@@ -19,6 +19,8 @@ class SigninUser(graphene.Mutation):
   user = graphene.Field(UserType)
 
   def mutate(self, info, email, password):
+    if not email or not password:
+        return Response({ error: 'Invalid email or password' })
     try:
       user = User.objects.get(email=email)
     except User.DoesNotExist:
