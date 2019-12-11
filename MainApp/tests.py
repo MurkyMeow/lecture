@@ -54,13 +54,13 @@ class CommentsTests(LectureGraphQLTestCase):
     variables = { 'lectureId': 1, 'slideId': 1 }
     res = self.query('''
       query getComments($lectureId: Int!, $slideId: Int!) {
-        comments(lectureId: $lectureId, slideId: $slideId) {
+        particularComments(lectureId: $lectureId, slideId: $slideId) {
           text
         }
       }
     ''', variables=variables)
     self.assertResponseNoErrors(res)
-    resComments = res['data']['comments']
+    resComments = res['data']['particularComments']
     self.assertEqual(len(resComments), len(self.comments))
 
   def test_create_comment(self):
