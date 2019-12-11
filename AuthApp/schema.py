@@ -19,16 +19,14 @@ class SigninUser(graphene.Mutation):
   user = graphene.Field(UserType)
 
   def mutate(self, info, email, password):
-    if not email or not password:
-        return Response({ error: 'Invalid email or password' })
     try:
       user = User.objects.get(email=email)
     except User.DoesNotExist:
-      return None
+      raise Exception('E_NOT_FOUND')
     if check_password(password, user.password):
       login(info.context, user)
       return SigninUser(user=user)
-    return None
+    raise Exception('E_VALIDATION')
 
 class SignupConflict(graphene.ObjectType):
   name = graphene.Boolean()
