@@ -1,7 +1,6 @@
 import { State } from 'marycat'
-
-export type User = { username: string }
+import { Me_me } from './graphql-types/Me'
 
 export const store = {
-  user: new State<User | null>(null),
+  user: new State<Me_me | null>(null),
 }
