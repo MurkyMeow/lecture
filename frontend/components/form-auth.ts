@@ -24,11 +24,10 @@ function viewFormAuth(h: PipeFn<ShadowRoot>) {
     }
     try {
       if (option.v === '👽') {
-        const { data: { signup } } = await client.query<Signup, SignupVariables>({
+        const { data } = await client.query<Signup, SignupVariables>({
           query: SIGNUP, variables,
         })
-        if (!signup) return
-        const { user, conflict } = signup
+        const { user, conflict } = data.signup
         if (user) store.user.v = user
         else if (conflict) {
           errors.v = {
@@ -38,10 +37,10 @@ function viewFormAuth(h: PipeFn<ShadowRoot>) {
           }
         }
       } else {
-        const { data: { signin } } = await client.query<Signin, SigninVariables>({
+        const { data } = await client.query<Signin, SigninVariables>({
           query: SIGNIN, variables,
         })
-        if (signin && signin.user) store.user.v = signin.user
+        if (data.signin.user) store.user.v = data.signin.user
       }
     } catch (err) {
       console.log(err)
