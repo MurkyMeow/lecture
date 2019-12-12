@@ -110,3 +110,6 @@ venv.bak/
 */node_modules
 */package-lock.json
 */dist
+
+# graphql codegen
+frontend/schema.json

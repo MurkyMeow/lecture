@@ -5,12 +5,16 @@
   "main": "index.js",
   "scripts": {
     "build": "rollup -c",
-    "watch": "rollup -c -w"
+    "watch": "rollup -c -w",
+    "gen-schema": "apollo schema:download --endpoint=http://localhost:8000/graphql/ schema.json",
+    "gen-types": "apollo codegen:generate --localSchemaFile=schema.json --target=typescript --includes=queries.ts --tagName=gql --addTypename --outputFlat graphql-types",
+    "generate": "npm run gen-schema && npm run gen-types"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "apollo-boost": "^0.4.4",
     "marycat": "^4.1.0"
   },
   "devDependencies": {
