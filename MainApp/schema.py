@@ -89,18 +89,24 @@ class CreateProgress(graphene.Mutation):
     ))
 
 class Query(graphene.ObjectType):
-  particular_comments = graphene.List(
-    CommentType,
+  particular_comments = graphene.List(CommentType,
+    required=True,
     lecture_id=graphene.Int(required=True),
     slide_id=graphene.Int(required=True),
   )
-  all_courses = graphene.List(CourseType)
-  particular_progress = graphene.List(ProgressType)
-  particular_lectures = graphene.List(LectureType, 
-    course_id=graphene.Int(required=True)
+  all_courses = graphene.List(CourseType,
+    required=True,
   )
-  particular_slides = graphene.List(SlideType, 
-    course_id=graphene.Int(required=True)
+  particular_progress = graphene.List(ProgressType,
+    required=True,
+  )
+  particular_lectures = graphene.List(LectureType,
+    required=True,
+    course_id=graphene.Int(required=True),
+  )
+  particular_slides = graphene.List(SlideType,
+    required=True,
+    course_id=graphene.Int(required=True),
   )
 
   def resolve_particular_comments(self, info, lecture_id, slide_id):
@@ -119,7 +125,7 @@ class Query(graphene.ObjectType):
     return Slide.objects.filter(course=course_id)
 
 class Mutation(graphene.ObjectType):
-  create_comment = CreateComment.Field()
-  patch_comment = PatchComment.Field()
-  delete_comment = DeleteComment.Field()
-  create_progress = CreateProgress.Field()
+  create_comment = CreateComment.Field(required=True)
+  patch_comment = PatchComment.Field(required=True)
+  delete_comment = DeleteComment.Field(required=True)
+  create_progress = CreateProgress.Field(required=True)

@@ -64,9 +64,9 @@ class SignoutUser(graphene.Mutation):
     return SignoutUser(ok=True)
 
 class Mutation(graphene.ObjectType):
-  signin = SigninUser.Field()
-  signup = SignupUser.Field()
-  signout = SignoutUser.Field()
+  signin = SigninUser.Field(required=True)
+  signup = SignupUser.Field(required=True)
+  signout = SignoutUser.Field(required=True)
 
 class Query(graphene.ObjectType):
   me = graphene.Field(UserType)
