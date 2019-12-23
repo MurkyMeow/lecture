@@ -7,7 +7,7 @@ class Course(models.Model):
     name = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.name
+        return self.id
 
 
 class Lecture(models.Model):
@@ -18,17 +18,18 @@ class Lecture(models.Model):
     background = models.CharField(max_length=50)
 
     def __str__(self):
-        return self.title
+        return self.id
 
 
 class Slide(models.Model):
 
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
     lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     title =  models.CharField(max_length=150)
     content = models.TextField()
 
     def __str__(self):
-        return self.title
+        return self.id
 
 
 class Exercise(models.Model):
@@ -41,7 +42,7 @@ class Exercise(models.Model):
         verbose_name_plural = "Exercises"
 
     def __str__(self):
-        return self.task
+        return self.id
 
 
 class Answer(models.Model):
@@ -55,15 +56,16 @@ class Answer(models.Model):
         verbose_name_plural = "Answers"
 
     def __str__(self):
-        return self.option, self.for_exercise
+        return self.id
 
 
 class Comment(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
     lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     slide = models.ForeignKey("Slide", null=True, on_delete=models.CASCADE)
-    text = models.TextField()
+    text = models.CharField(max_length=1000)
     published = models.DateTimeField(auto_now=True)
 
     class Meta:
@@ -71,12 +73,13 @@ class Comment(models.Model):
         verbose_name_plural = "Comments"
 
     def __str__(self):
-        return self.user, text 
+        return self.id
 
 
 class Progress(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey("Course", null=True, on_delete=models.CASCADE)
     lecture = models.ForeignKey("Lecture", null=True, on_delete=models.CASCADE)
     slide = models.ForeignKey("Slide", null=True, on_delete=models.CASCADE)
 
@@ -85,4 +88,4 @@ class Progress(models.Model):
         verbose_name_plural = "Progress"
 
     def __str__(self):
-        return self.user, self.lecture
+        return self.id

@@ -76,8 +76,8 @@ class APIProgress(APIView):
     def post(self, request):
         new_progress = Progress.objects.create(
             user=request.user,
-            lecture_id=request.data.get('lecture_id'),
-            slide_id=request.data.get('slide_id'),
+            lecture_id=request.GET.get('lecture_id'),
+            slide_id=request.GET.get('slide_id'),
         )
         serializer = ProgressSerializer(new_progress)
         return Response(serializer.data)

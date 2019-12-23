@@ -32,7 +32,7 @@ class GetControllersTest(APITestCase):
             params = { 'lecture_id': lecture.id }
             res = self.client.get('/course/slides/', params)
             self.assertEqual(res.status_code, status.HTTP_200_OK)
-            
+
 class CommentsTests(APITestCase):
     def setUp(self):
         u = User.objects.create_user(
@@ -52,13 +52,20 @@ class CommentsTests(APITestCase):
         self.client.force_authenticate(u)
 
     def test_get_comments(self):
-        params = {
-            'lecture_id': 1,
-            'slide_id': 1,
-        }
-        res = self.client.get('/course/comments/', params)
+        res = self.client.get('/course/comments/', {
+            'lecture_id': 1, 'slide_id': 1,
+        })
         self.assertEqual(res.status_code, status.HTTP_200_OK)
         self.assertEqual(len(res.data), len(self.comments))
+
+    def test_comment_has_author(self):
+        res = self.client.get('/course/comments/', {
+            'lecture_id': 1, 'slide_id': 1,
+        })
+        comment_author = res.data[0].get('user')
+        self.assertIsInstance(comment_author, dict)
+        self.assertIn('id', comment_author)
+        self.assertIn('username', comment_author)
 
     def test_create_comment(self):
         comment = { 'lecture_id': 1, 'slide_id': 1, 'text': 'qwerqwer' }
